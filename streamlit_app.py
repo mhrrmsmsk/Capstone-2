@@ -29,11 +29,26 @@ from src.logger import get_logger
 
 # Configuration
 st.set_page_config(
-    page_title="Crop Recommendation System",
-    page_icon="🌾",
+    page_title="CropSense — Crop Recommendation & Yield Optimization",
+    page_icon="�",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
 )
+
+# Professional styling
+st.markdown("""
+<style>
+    /* Cleaner typography */
+    .stMetric label { font-size: 0.85rem; }
+    .stMetric [data-testid="stMetricValue"] { font-size: 1.6rem; font-weight: 600; }
+    /* Subtle section dividers */
+    hr { border: none; border-top: 1px solid #e0e0e0; margin: 1.5rem 0; }
+    /* Sidebar cleanup */
+    [data-testid="stSidebar"] { border-right: 1px solid #e0e0e0; }
+    /* Dataframe styling */
+    .stDataFrame { border: 1px solid #e0e0e0; border-radius: 4px; }
+</style>
+""", unsafe_allow_html=True)
 
 logger = get_logger("streamlit_app")
 
@@ -65,7 +80,7 @@ def load_system():
                 logger.warning(f"Missing: {filename}")
         
         if missing_files:
-            error_msg = "⚠️ Missing trained models:\n"
+            error_msg = "Missing trained models:\n"
             for file in missing_files:
                 error_msg += f"  • {file}\n"
             error_msg += "\n**To fix:**\n"
@@ -82,7 +97,7 @@ def load_system():
         
         # Load data for recommender
         if not data_path.exists():
-            st.error(f"❌ Dataset not found: {data_path}")
+            st.error(f"Dataset not found: {data_path}")
             return None, None, None
         
         df_train = pd.read_csv(data_path)
@@ -123,7 +138,7 @@ def load_system():
         
         return predictor, recommender, df_train
     except Exception as e:
-        error_msg = f"❌ Error loading system: {str(e)}\n\n"
+        error_msg = f"Error loading system: {str(e)}\n\n"
         error_msg += "**Troubleshooting steps:**\n"
         error_msg += "1. Make sure you're in the correct directory\n"
         error_msg += "2. Train models: `python3 run_pipeline.py`\n"
@@ -164,93 +179,84 @@ def create_gauge_chart(value, title, min_val=0, max_val=100):
 
 def main():
     # Sidebar
-    st.sidebar.title("🌾 Crop Recommendation System")
-    st.sidebar.markdown("---")
+    st.sidebar.title("CropSense")
+    st.sidebar.caption("Crop Recommendation & Yield Optimization")
+    st.sidebar.divider()
     
     page = st.sidebar.radio(
-        "Select Mode:",
-        ["🏠 Home", "📊 Single Prediction", "📈 Batch Prediction", "🔍 Feature Analysis", "ℹ️ About"]
+        "Navigation",
+        ["Dashboard", "Predict", "Optimize", "Batch", "Analysis"],
+        label_visibility="collapsed",
     )
     
-    st.sidebar.markdown("---")
-    st.sidebar.markdown("""
-    ### 📋 System Info
-    - **Models**: Classification (100%) + Regression (R²=0.9931)
-    - **Crops**: 22 varieties
-    - **Features**: 17 input parameters
-    - **Status**: 🟢 Production Ready
-    """)
+    st.sidebar.divider()
+    st.sidebar.caption("Classification 100% | Regression R²=0.9946 | 22 crops")
     
     # Load system
     predictor, recommender, df_train = load_system()
     
     if predictor is None:
-        st.error("⚠️ System failed to load. Please check the model files.")
+        st.error("System failed to load. Please check the model files.")
         return
     
     # ========================================================================
-    # PAGE: HOME
+    # PAGE: DASHBOARD
     # ========================================================================
-    if page == "🏠 Home":
-        st.title("🌾 Sensor-Based Crop Recommendation & Yield Optimization")
-        st.markdown("### Welcome to the Intelligent Agricultural System")
+    if page == "Dashboard":
+        st.title("CropSense Dashboard")
         
-        col1, col2, col3 = st.columns(3)
-        
+        col1, col2, col3, col4 = st.columns(4)
         with col1:
-            st.metric("Classification Accuracy", "100%", "🎯")
+            st.metric("Classification Accuracy", "100%")
         with col2:
-            st.metric("Yield Prediction R²", "0.9931", "✓")
+            st.metric("Yield R²", "0.9946")
         with col3:
-            st.metric("Supported Crops", "22", "🌱")
+            st.metric("Supported Crops", "22")
+        with col4:
+            st.metric("Input Features", "17")
         
-        st.markdown("---")
+        st.divider()
         
-        st.markdown("""
-        ## 🚀 Features
+        col_left, col_right = st.columns([2, 1])
         
-        ### 📊 Single Prediction
-        - Input sensor data (complete or partial)
-        - Get crop recommendations with probabilities
-        - Receive yield predictions
-        - Estimate missing values intelligently
+        with col_left:
+            st.subheader("Quick Predict")
+            st.caption("Enter a few sensor readings to get a crop recommendation instantly.")
+            quick_features = ["Temperature", "Rainfall", "pH"]
+            quick_data = {}
+            qcols = st.columns(3)
+            for i, feat in enumerate(quick_features):
+                with qcols[i]:
+                    quick_data[feat] = st.number_input(feat, value=0.0, key=f"q_{feat}")
+            
+            if st.button("Predict", use_container_width=True, key="quick_predict"):
+                result = predictor.predict(quick_data)
+                top = result.get("recommended_crops", [])
+                if top:
+                    st.success(f"**Top recommendation:** {top[0]['name']} ({top[0]['probability']:.0%})")
+                    if len(top) > 1:
+                        others = ", ".join(f"{c['name']} ({c['probability']:.0%})" for c in top[1:4])
+                        st.caption(f"Alternatives: {others}")
+                    st.metric("Estimated Yield", f"{result.get('estimated_yield', 0):.2f}")
         
-        ### 📈 Batch Prediction
-        - Process multiple sensor readings at once
-        - Export results as CSV
-        - Perfect for multi-field analysis
-        
-        ### 🔍 Feature Analysis
-        - View feature importance rankings
-        - Understand model decisions
-        - See crop-specific optimization ranges
-        
-        ## 📖 How It Works
-        
-        1. **Complete Data**: Directly predicts using trained models
-        2. **Partial Data**: Uses KNN similarity search to estimate missing values
-        3. **Optimization**: Suggests optimal ranges for each crop
-        
-        ## 🎯 Sample Crops
-        """)
-        
-        # Display sample crops
-        sample_crops = df_train['Name'].unique()[:12]
-        st.write(", ".join(sample_crops))
+        with col_right:
+            st.subheader("Supported Crops")
+            crops = sorted(df_train['Name'].unique().tolist())
+            for crop in crops:
+                st.caption(crop)
         
     # ========================================================================
     # PAGE: SINGLE PREDICTION
     # ========================================================================
-    elif page == "📊 Single Prediction":
-        st.title("📊 Make a Prediction")
-        
-        # Feature input method
-        input_method = st.radio("Select input method:", ["📝 Manual Input", "🎲 Random Values", "📋 Template"])
-        
+    elif page == "Predict":
+        st.title("Predict Crop & Yield")
+
+        input_method = st.radio("Input method:", ["Manual", "Sample from dataset", "Template"], horizontal=True)
+
         # Initialize session state
         if 'input_data' not in st.session_state:
             st.session_state.input_data = {}
-        
+
         # Define features
         numerical_features = [
             'Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh',
@@ -258,40 +264,30 @@ def main():
         ]
         categorical_features = ['Fertility', 'Photoperiod', 'Category_pH', 'Soil_Type', 'Season']
         crops = sorted(df_train['Name'].unique().tolist())
-        
+
         input_data = {}
-        
-        if input_method == "📝 Manual Input":
+
+        if input_method == "Manual":
             col1, col2 = st.columns(2)
-            
-            # Numerical inputs
+
             with col1:
-                st.subheader("📐 Numerical Features")
+                st.subheader("Numerical")
                 for feature in numerical_features:
                     input_data[feature] = st.number_input(
                         f"{feature}",
                         value=0.0,
                         key=f"num_{feature}"
                     )
-            
-            # Categorical inputs
+
             with col2:
-                st.subheader("🏷️ Categorical Features")
-                
-                # Get unique values for each categorical feature
-                fertility_options = df_train['Fertility'].unique().tolist()
-                photoperiod_options = df_train['Photoperiod'].unique().tolist()
-                category_ph_options = df_train['Category_pH'].unique().tolist()
-                soil_type_options = df_train['Soil_Type'].unique().tolist()
-                season_options = df_train['Season'].unique().tolist()
-                
-                input_data['Fertility'] = st.selectbox("Fertility", fertility_options, key="Fertility")
-                input_data['Photoperiod'] = st.selectbox("Photoperiod", photoperiod_options, key="Photoperiod")
-                input_data['Category_pH'] = st.selectbox("Category_pH", category_ph_options, key="Category_pH")
-                input_data['Soil_Type'] = st.selectbox("Soil_Type", soil_type_options, key="Soil_Type")
-                input_data['Season'] = st.selectbox("Season", season_options, key="Season")
+                st.subheader("Categorical")
+                input_data['Fertility'] = st.selectbox("Fertility", df_train['Fertility'].unique().tolist(), key="Fertility")
+                input_data['Photoperiod'] = st.selectbox("Photoperiod", df_train['Photoperiod'].unique().tolist(), key="Photoperiod")
+                input_data['Category_pH'] = st.selectbox("Category_pH", df_train['Category_pH'].unique().tolist(), key="Category_pH")
+                input_data['Soil_Type'] = st.selectbox("Soil_Type", df_train['Soil_Type'].unique().tolist(), key="Soil_Type")
+                input_data['Season'] = st.selectbox("Season", df_train['Season'].unique().tolist(), key="Season")
         
-        elif input_method == "🎲 Random Values":
+        elif input_method == "Sample from dataset":
             # Random values from training data
             sample_row = df_train.sample(1).iloc[0]
             
@@ -311,8 +307,8 @@ def main():
                     key=f"rand_{feature}"
                 )
         
-        elif input_method == "📋 Template":
-            st.info("Select features to include in prediction (leave unchecked to estimate)")
+        elif input_method == "Template":
+            st.info("Select features to provide. Unselected features will be estimated.")
             
             selected_features = st.multiselect(
                 "Choose features to provide:",
@@ -339,312 +335,211 @@ def main():
                     )
         
         # Make prediction
-        if st.button("🚀 Make Prediction", use_container_width=True):
+        if st.button("Predict", use_container_width=True, type="primary"):
             try:
                 result = predictor.predict(input_data)
-                
-                # Display results
-                st.success("✅ Prediction Complete!")
-                st.markdown("---")
+                st.divider()
                 
                 # Recommended Crops
-                st.subheader("🌱 Recommended Crops")
                 crops_data = result.get('recommended_crops', [])
                 
                 if crops_data:
                     col1, col2, col3 = st.columns(3)
-                    
-                    for idx, (col, crop) in enumerate(zip([col1, col2, col3], crops_data[:3])):
+                    for col, crop in zip([col1, col2, col3], crops_data[:3]):
                         with col:
                             prob = crop.get('probability', 0) * 100
-                            st.metric(
-                                crop['name'],
-                                f"{prob:.1f}%",
-                                delta=f"Confidence"
-                            )
+                            st.metric(crop['name'], f"{prob:.1f}%")
                 
-                # Create bar chart for recommendations
+                # Bar chart
                 crop_names = [c['name'] for c in crops_data[:5]]
                 crop_probs = [c['probability'] * 100 for c in crops_data[:5]]
-                
                 fig = px.bar(
-                    x=crop_probs,
-                    y=crop_names,
-                    orientation='h',
-                    title="Top 5 Crop Recommendations",
-                    labels={'x': 'Probability (%)', 'y': 'Crop'}
+                    x=crop_probs, y=crop_names, orientation='h',
+                    labels={'x': 'Probability (%)', 'y': ''},
+                    color=crop_probs, color_continuous_scale='greens',
                 )
+                fig.update_layout(showlegend=False, margin=dict(l=20, r=20, t=20, b=20))
                 st.plotly_chart(fig, use_container_width=True)
                 
-                # Estimated Yield
-                st.subheader("📈 Estimated Yield")
-                yield_value = result.get('estimated_yield', 0)
-                
+                # Yield & input type
                 col1, col2 = st.columns(2)
                 with col1:
-                    st.metric("Yield Value", f"{yield_value:.2f} units")
+                    st.metric("Estimated Yield", f"{result.get('estimated_yield', 0):.2f}")
                 with col2:
-                    st.metric("Input Type", result.get('input_type', 'unknown').upper())
+                    st.metric("Input Type", result.get('input_type', 'unknown').title())
                 
-                # Missing Values Estimation
+                # Missing Values
                 estimated_missing = result.get('estimated_missing_values', {})
                 if estimated_missing:
-                    st.subheader("🔍 Estimated Missing Values")
-                    
-                    cols = st.columns(3)
-                    for idx, (feature, ranges) in enumerate(list(estimated_missing.items())[:6]):
-                        with cols[idx % 3]:
-                            st.write(f"**{feature}**")
-                            st.write(f"Range: {ranges.get('range', 'N/A')}")
-                            st.write(f"Recommended: {ranges.get('recommended', 'N/A')}")
+                    with st.expander("Estimated Missing Values", expanded=False):
+                        miss_data = []
+                        for feature, ranges in estimated_missing.items():
+                            miss_data.append({
+                                'Feature': feature,
+                                'Range': ranges.get('range', 'N/A'),
+                                'Recommended': ranges.get('recommended', 'N/A')
+                            })
+                        st.dataframe(pd.DataFrame(miss_data), use_container_width=True, hide_index=True)
                 
                 # Optimized Conditions
                 optimized = result.get('optimized_conditions', {})
                 if optimized:
-                    top_crop_name = crops_data[0]['name'] if crops_data else 'Selected Crop'
-                    st.subheader(f"✨ Optimized Conditions for {top_crop_name}")
-                    st.caption("These are the target values recommended for the selected crop based on similar high-yield samples.")
-
-                    # Create dataframe for better visualization
-                    opt_data = []
-                    for feature, values in optimized.items():
-                        current_value = input_data.get(feature)
-                        if current_value is None:
-                            current_value = estimated_missing.get(feature, {}).get('recommended', 'N/A')
-
-                        opt_data.append({
-                            'Feature': feature,
-                            'Current Value': current_value,
-                            'Recommended Range': values.get('range', 'N/A'),
-                            'Recommended Target': values.get('recommended', 'N/A')
-                        })
-
-                    opt_df = pd.DataFrame(opt_data)
-                    st.dataframe(opt_df, use_container_width=True)
-
-                    csv = opt_df.to_csv(index=False)
-                    st.download_button(
-                        label="📥 Download Optimized Values as CSV",
-                        data=csv,
-                        file_name=f"{top_crop_name}_optimized_values.csv",
-                        mime="text/csv"
-                    )
-                
-                # Explanation
-                explanation = result.get('explanation', '')
-                if explanation:
-                    st.subheader("📝 Explanation")
-                    st.info(explanation)
+                    top_crop_name = crops_data[0]['name'] if crops_data else 'Crop'
+                    with st.expander(f"Optimized Conditions for {top_crop_name}", expanded=False):
+                        opt_data = []
+                        for feature, values in optimized.items():
+                            current_value = input_data.get(feature)
+                            if current_value is None:
+                                current_value = estimated_missing.get(feature, {}).get('recommended', 'N/A')
+                            opt_data.append({
+                                'Feature': feature,
+                                'Current': current_value,
+                                'Range': values.get('range', 'N/A'),
+                                'Target': values.get('recommended', 'N/A')
+                            })
+                        opt_df = pd.DataFrame(opt_data)
+                        st.dataframe(opt_df, use_container_width=True, hide_index=True)
+                        st.download_button("Download CSV", opt_df.to_csv(index=False), f"{top_crop_name}_optimized.csv", "text/csv")
 
             except Exception as e:
-                st.error(f"❌ Prediction failed: {str(e)}")
+                st.error(f"Prediction failed: {str(e)}")
                 logger.error(f"Prediction error: {str(e)}")
 
-        # Separate crop optimization section
-        st.markdown("---")
-        st.subheader("🎯 Crop Optimization")
-        st.caption("Select the crop you want to optimize, then enter the current values. The model will tell you which values are hurting yield and what to change.")
+    # ========================================================================
+    # PAGE: OPTIMIZE
+    # ========================================================================
+    elif page == "Optimize":
+        st.title("Optimize Crop Yield")
+        st.caption("Select a crop and enter current conditions. The model identifies which inputs hurt yield and recommends adjustments.")
 
-        selected_crop_for_optimization = st.selectbox(
-            "Select crop to optimize",
-            crops,
-            key="selected_crop_for_optimization"
-        )
+        numerical_features = [
+            'Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh',
+            'Nitrogen', 'Phosphorus', 'Potassium', 'N_Ratio', 'P_Ratio', 'K_Ratio'
+        ]
+        categorical_features = ['Fertility', 'Photoperiod', 'Category_pH', 'Soil_Type', 'Season']
+        crops = sorted(df_train['Name'].unique().tolist())
 
-        optimization_input_method = st.radio(
-            "How do you want to enter the crop conditions?",
-            ["📝 Manual Input", "🎲 Random Values", "📋 Template"],
-            key="optimization_input_method"
-        )
+        selected_crop = st.selectbox("Select crop to optimize", crops, key="opt_crop")
 
-        optimization_input_data = {}
+        input_method = st.radio("Input method:", ["Manual", "Sample from dataset", "Template"], horizontal=True, key="opt_method")
+        opt_data = {}
 
-        if optimization_input_method == "📝 Manual Input":
+        if input_method == "Manual":
             col1, col2 = st.columns(2)
-
             with col1:
-                st.markdown("**Numerical values**")
+                st.markdown("**Numerical**")
                 for feature in numerical_features:
-                    optimization_input_data[feature] = st.number_input(
-                        f"{feature}",
-                        value=0.0,
-                        key=f"opt_num_{feature}"
-                    )
-
+                    opt_data[feature] = st.number_input(f"{feature}", value=0.0, key=f"opt_manual_{feature}")
             with col2:
-                st.markdown("**Categorical values**")
-                optimization_input_data['Fertility'] = st.selectbox(
-                    "Fertility",
-                    df_train['Fertility'].unique().tolist(),
-                    key="opt_Fertility"
-                )
-                optimization_input_data['Photoperiod'] = st.selectbox(
-                    "Photoperiod",
-                    df_train['Photoperiod'].unique().tolist(),
-                    key="opt_Photoperiod"
-                )
-                optimization_input_data['Category_pH'] = st.selectbox(
-                    "Category_pH",
-                    df_train['Category_pH'].unique().tolist(),
-                    key="opt_Category_pH"
-                )
-                optimization_input_data['Soil_Type'] = st.selectbox(
-                    "Soil_Type",
-                    df_train['Soil_Type'].unique().tolist(),
-                    key="opt_Soil_Type"
-                )
-                optimization_input_data['Season'] = st.selectbox(
-                    "Season",
-                    df_train['Season'].unique().tolist(),
-                    key="opt_Season"
-                )
+                st.markdown("**Categorical**")
+                opt_data['Fertility'] = st.selectbox("Fertility", df_train['Fertility'].unique().tolist(), key="opt_mfert")
+                opt_data['Photoperiod'] = st.selectbox("Photoperiod", df_train['Photoperiod'].unique().tolist(), key="opt_mphoto")
+                opt_data['Category_pH'] = st.selectbox("Category_pH", df_train['Category_pH'].unique().tolist(), key="opt_mph")
+                opt_data['Soil_Type'] = st.selectbox("Soil_Type", df_train['Soil_Type'].unique().tolist(), key="opt_msoil")
+                opt_data['Season'] = st.selectbox("Season", df_train['Season'].unique().tolist(), key="opt_mseason")
 
-        elif optimization_input_method == "🎲 Random Values":
+        elif input_method == "Sample from dataset":
             sample_row = df_train.sample(1).iloc[0]
             for feature in numerical_features:
-                optimization_input_data[feature] = st.number_input(
-                    f"{feature}",
-                    value=float(sample_row[feature]),
-                    key=f"opt_rand_{feature}"
-                )
-
+                opt_data[feature] = st.number_input(f"{feature}", value=float(sample_row[feature]), key=f"opt_rand_{feature}")
             for feature in categorical_features:
                 options = df_train[feature].unique().tolist()
-                optimization_input_data[feature] = st.selectbox(
-                    feature,
-                    options,
-                    index=options.index(sample_row[feature]) if sample_row[feature] in options else 0,
-                    key=f"opt_rand_{feature}"
-                )
+                opt_data[feature] = st.selectbox(feature, options, index=options.index(sample_row[feature]) if sample_row[feature] in options else 0, key=f"opt_rand_{feature}")
 
-        elif optimization_input_method == "📋 Template":
-            st.info("Select the features you want to provide. Unselected features will be estimated before optimization.")
-
-            selected_features = st.multiselect(
-                "Choose features to provide:",
-                numerical_features + categorical_features,
-                default=['Temperature', 'Rainfall', 'pH'],
-                key="optimization_selected_features"
-            )
-
+        elif input_method == "Template":
+            st.info("Select features to provide. Unselected features will be estimated.")
+            selected_features = st.multiselect("Choose features:", numerical_features + categorical_features, default=['Temperature', 'Rainfall', 'pH'], key="opt_sel")
             sample_row = df_train.sample(1).iloc[0]
-
             for feature in selected_features:
                 if feature in numerical_features:
-                    optimization_input_data[feature] = st.number_input(
-                        f"{feature}",
-                        value=float(sample_row[feature]),
-                        key=f"opt_template_{feature}"
-                    )
+                    opt_data[feature] = st.number_input(f"{feature}", value=float(sample_row[feature]), key=f"opt_tpl_{feature}")
                 else:
-                    optimization_input_data[feature] = st.selectbox(
-                        feature,
-                        df_train[feature].unique().tolist(),
-                        key=f"opt_template_{feature}"
-                    )
+                    opt_data[feature] = st.selectbox(feature, df_train[feature].unique().tolist(), key=f"opt_tpl_{feature}")
 
-        if st.button("🔧 Suggest Optimal Values", use_container_width=True, key="optimize_selected_crop_button"):
+        if st.button("Analyze", use_container_width=True, type="primary", key="opt_btn"):
             try:
-                opt_result = predictor.predict_for_crop(selected_crop_for_optimization, optimization_input_data)
-                optimized = opt_result.get('optimized_conditions', {})
-                estimated_missing = opt_result.get('estimated_missing_values', {})
-
-                st.success(f"✅ Optimization ready for {selected_crop_for_optimization}")
-                st.write(
-                    "The table below highlights which inputs are hurting yield and what to change for the selected crop."
-                )
+                result = predictor.predict_for_crop(selected_crop, opt_data)
+                optimized = result.get('optimized_conditions', {})
+                estimated_missing = result.get('estimated_missing_values', {})
+                st.divider()
 
                 if optimized:
-                    crop_baseline = df_train[df_train['Name'] == selected_crop_for_optimization]
-                    opt_data = []
+                    out = []
                     for feature, values in optimized.items():
-                        current_value = optimization_input_data.get(feature)
-                        current_display = current_value if current_value is not None else estimated_missing.get(feature, {}).get('recommended', 'N/A')
-                        target_value = values.get('recommended', 'N/A')
+                        current = opt_data.get(feature)
+                        current_display = current if current is not None else estimated_missing.get(feature, {}).get('recommended', 'N/A')
+                        target = values.get('recommended', 'N/A')
+                        mean_v = values.get('mean')
+                        low = values.get('min')
+                        high = values.get('max')
 
-                        if feature in numerical_features and isinstance(current_value, (int, float)):
-                            low = values.get('min')
-                            high = values.get('max')
-                            mean_value = values.get('mean')
-
-                            if low is not None and high is not None and low <= current_value <= high:
-                                suggestion = "Looks good"
-                                priority = "Low"
-                            elif mean_value is not None:
-                                direction = "Increase" if current_value < mean_value else "Decrease"
-                                suggestion = f"{direction} toward {mean_value:.2f}"
-                                priority = "High"
+                        if feature in numerical_features and isinstance(current, (int, float)) and low is not None and high is not None:
+                            if low <= current <= high:
+                                status = "Good"
+                                action = "Keep"
+                            elif mean_v is not None:
+                                direction = "Increase" if current < mean_v else "Decrease"
+                                action = f"{direction} to {mean_v:.1f}"
+                                status = "Adjust"
                             else:
-                                suggestion = f"Move toward {target_value}"
-                                priority = "Medium"
+                                action = f"Move to {target}"
+                                status = "Adjust"
                         else:
-                            if str(current_value) == str(target_value):
-                                suggestion = "Looks good"
-                                priority = "Low"
+                            if str(current) == str(target):
+                                status = "Good"
+                                action = "Keep"
                             else:
-                                suggestion = f"Change to {target_value}"
-                                priority = "High"
+                                action = f"Change to {target}"
+                                status = "Adjust"
 
-                        opt_data.append({
+                        out.append({
                             'Feature': feature,
-                            'Current Value': current_display,
-                            'Recommended Target': target_value,
-                            'Recommended Range': values.get('range', 'N/A'),
-                            'What to Change': suggestion,
-                            'Priority': priority
+                            'Current': current_display,
+                            'Range': values.get('range', 'N/A'),
+                            'Target': target,
+                            'Action': action,
+                            'Status': status
                         })
 
-                    opt_df = pd.DataFrame(opt_data)
-                    opt_df['Priority'] = pd.Categorical(opt_df['Priority'], categories=['High', 'Medium', 'Low'], ordered=True)
-                    opt_df = opt_df.sort_values(['Priority', 'Feature'], ascending=[True, True]).drop(columns=['Priority'])
-                    st.dataframe(opt_df, use_container_width=True)
+                    out_df = pd.DataFrame(out)
+                    out_df['Status'] = pd.Categorical(out_df['Status'], categories=['Adjust', 'Good'], ordered=True)
+                    out_df = out_df.sort_values(['Status', 'Feature'], ascending=[True, True]).drop(columns=['Status'])
+                    st.dataframe(out_df, use_container_width=True, hide_index=True)
 
-                    csv = opt_df.to_csv(index=False)
-                    st.download_button(
-                        label="📥 Download Optimization Suggestions as CSV",
-                        data=csv,
-                        file_name=f"{selected_crop_for_optimization}_optimization_suggestions.csv",
-                        mime="text/csv",
-                        key="download_selected_crop_optimization"
-                    )
+                    st.download_button("Download CSV", out_df.to_csv(index=False), f"{selected_crop}_optimization.csv", "text/csv")
 
-                    problem_features = opt_df[opt_df['What to Change'] != 'Looks good']['Feature'].head(5).tolist()
-                    if problem_features:
-                        st.warning("Likely limiting inputs: " + ", ".join(problem_features))
+                    issues = out_df[out_df['Action'] != 'Keep']['Feature'].head(5).tolist()
+                    if issues:
+                        st.info("Priority adjustments: " + ", ".join(issues))
                     else:
-                        st.success("All provided values are already close to the crop-friendly range.")
+                        st.success("All conditions are optimal for this crop.")
                 else:
-                    st.warning("No optimization suggestions could be generated for the selected crop.")
+                    st.info("No optimization suggestions available.")
 
-                if opt_result.get('estimated_yield') is not None:
-                    st.metric("Estimated Yield for Selected Crop", f"{opt_result['estimated_yield']:.2f} units")
-
+                if result.get('estimated_yield') is not None:
+                    st.metric("Estimated Yield", f"{result['estimated_yield']:.2f}")
             except Exception as e:
-                st.error(f"❌ Optimization failed: {str(e)}")
+                st.error(f"Optimization failed: {str(e)}")
                 logger.error(f"Optimization error: {str(e)}")
-    
+
     # ========================================================================
-    # PAGE: BATCH PREDICTION
+    # PAGE: BATCH
     # ========================================================================
-    elif page == "📈 Batch Prediction":
-        st.title("📈 Batch Prediction")
-        
-        # Option to upload CSV
-        uploaded_file = st.file_uploader("Upload CSV file with sensor data", type="csv")
-        
+    elif page == "Batch":
+        st.title("Batch Prediction")
+        st.caption("Upload a CSV with sensor readings for multiple fields.")
+
+        uploaded_file = st.file_uploader("Upload CSV file", type="csv")
+
         if uploaded_file is not None:
             try:
                 df = pd.read_csv(uploaded_file)
-                
-                st.subheader("📋 Preview Data")
                 st.dataframe(df.head(), use_container_width=True)
-                
-                if st.button("🚀 Process All Predictions", use_container_width=True):
-                    progress_bar = st.progress(0)
-                    status_text = st.empty()
-                    
+
+                if st.button("Run Batch", use_container_width=True, type="primary"):
+                    progress = st.progress(0)
                     results = []
-                    
+
                     for idx, row in df.iterrows():
                         try:
                             result = predictor.predict(row.to_dict())
@@ -652,251 +547,106 @@ def main():
                             results.append(result)
                         except Exception as e:
                             logger.error(f"Row {idx} error: {str(e)}")
-                        
-                        progress_bar.progress((idx + 1) / len(df))
-                        status_text.text(f"Processing: {idx + 1}/{len(df)}")
-                    
-                    st.success(f"✅ Processed {len(results)} predictions!")
-                    
-                    # Display results
-                    st.subheader("📊 Results Summary")
-                    
-                    results_df = []
+                        progress.progress((idx + 1) / len(df))
+
+                    st.success(f"Processed {len(results)} predictions.")
+
+                    out = []
                     for result in results:
-                        top_crop = result['recommended_crops'][0]
-                        results_df.append({
+                        top = result['recommended_crops'][0]
+                        out.append({
                             'Index': result['input_index'],
-                            'Top Crop': top_crop['name'],
-                            'Probability': f"{top_crop['probability']:.2%}",
-                            'Estimated Yield': f"{result['estimated_yield']:.2f}",
+                            'Top Crop': top['name'],
+                            'Probability': f"{top['probability']:.1%}",
+                            'Yield': f"{result['estimated_yield']:.2f}",
                             'Input Type': result['input_type']
                         })
-                    
-                    results_summary = pd.DataFrame(results_df)
-                    st.dataframe(results_summary, use_container_width=True)
-                    
-                    # Download results
-                    csv = results_summary.to_csv(index=False)
-                    st.download_button(
-                        label="📥 Download Results as CSV",
-                        data=csv,
-                        file_name="batch_predictions.csv",
-                        mime="text/csv"
-                    )
-            
+
+                    out_df = pd.DataFrame(out)
+                    st.dataframe(out_df, use_container_width=True, hide_index=True)
+                    st.download_button("Download Results", out_df.to_csv(index=False), "batch_predictions.csv", "text/csv")
+
             except Exception as e:
-                st.error(f"❌ Error processing file: {str(e)}")
+                st.error(f"Error processing file: {str(e)}")
     
     # ========================================================================
     # PAGE: FEATURE ANALYSIS
     # ========================================================================
-    elif page == "🔍 Feature Analysis":
-        st.title("🔍 Feature Analysis")
-        
-        tab1, tab2, tab3 = st.tabs(["📊 Feature Importance", "🎯 Crop Optimization", "📈 Data Distribution"])
-        
+    elif page == "Analysis":
+        st.title("Analysis")
+
+        tab1, tab2 = st.tabs(["Feature Importance", "Data Distribution"])
+
         with tab1:
-            st.subheader("Feature Importance for Crop Classification")
-            
-            # Load feature importance
             try:
                 feat_imp_crop = pd.read_csv(Path(__file__).parent / "models" / "feature_importance_crop.csv")
-                feat_imp_crop = feat_imp_crop.rename(columns={
-                    'feature': 'Feature',
-                    'importance': 'Importance'
-                })
-                
-                fig = px.bar(
-                    feat_imp_crop.head(10),
-                    x='Importance',
-                    y='Feature',
-                    orientation='h',
-                    title="Top 10 Features for Crop Classification"
-                )
+                feat_imp_crop = feat_imp_crop.rename(columns={'feature': 'Feature', 'importance': 'Importance'})
+                fig = px.bar(feat_imp_crop.head(10), x='Importance', y='Feature', orientation='h')
+                fig.update_layout(margin=dict(l=20, r=20, t=20, b=20))
                 st.plotly_chart(fig, use_container_width=True)
-                
-                st.dataframe(feat_imp_crop, use_container_width=True)
+                st.dataframe(feat_imp_crop, use_container_width=True, hide_index=True)
             except:
-                st.warning("Feature importance data not available")
-            
-            st.subheader("Feature Importance for Yield Prediction")
-            
+                st.info("Feature importance data not available.")
+
             try:
                 feat_imp_yield = pd.read_csv(Path(__file__).parent / "models" / "feature_importance_yield.csv")
-                feat_imp_yield = feat_imp_yield.rename(columns={
-                    'feature': 'Feature',
-                    'importance': 'Importance'
-                })
-                
-                fig = px.bar(
-                    feat_imp_yield.head(10),
-                    x='Importance',
-                    y='Feature',
-                    orientation='h',
-                    title="Top 10 Features for Yield Prediction"
-                )
+                feat_imp_yield = feat_imp_yield.rename(columns={'feature': 'Feature', 'importance': 'Importance'})
+                fig = px.bar(feat_imp_yield.head(10), x='Importance', y='Feature', orientation='h')
+                fig.update_layout(margin=dict(l=20, r=20, t=20, b=20))
                 st.plotly_chart(fig, use_container_width=True)
-                
-                st.dataframe(feat_imp_yield, use_container_width=True)
+                st.dataframe(feat_imp_yield, use_container_width=True, hide_index=True)
             except:
-                st.warning("Feature importance data not available")
-        
+                st.info("Feature importance data not available.")
+
         with tab2:
-            st.subheader("🎯 Crop-Specific Optimization Ranges")
-            
-            # Select crop
-            crops = sorted(df_train['Name'].unique().tolist())
-            selected_crop = st.selectbox("Select crop:", crops)
-            
-            # Get optimization for crop
-            try:
-                optimized = recommender.get_optimization_recommendations(selected_crop)
-                
-                if optimized:
-                    opt_data = []
-                    for feature, values in optimized.items():
-                        opt_data.append({
-                            'Feature': feature,
-                            'Range': values.get('range', 'N/A'),
-                            'Recommended': values.get('recommended', 'N/A')
-                        })
-                    
-                    opt_df = pd.DataFrame(opt_data)
-                    st.dataframe(opt_df, use_container_width=True)
-                    
-                    # Export
-                    csv = opt_df.to_csv(index=False)
-                    st.download_button(
-                        label="📥 Download Optimization as CSV",
-                        data=csv,
-                        file_name=f"{selected_crop}_optimization.csv",
-                        mime="text/csv"
-                    )
-                else:
-                    st.info("No optimization ranges available for the selected crop.")
-            except Exception as e:
-                st.error(f"Error getting optimization: {str(e)}")
-        
-        with tab3:
-            st.subheader("📈 Feature Distributions by Crop")
-            
-            # Select features to plot
             numerical_features = [
                 'Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh',
                 'Nitrogen', 'Phosphorus', 'Potassium', 'N_Ratio', 'P_Ratio', 'K_Ratio'
             ]
-            
-            selected_feature = st.selectbox("Select feature:", numerical_features)
-            
-            fig = px.box(
-                df_train,
-                x='Name',
-                y=selected_feature,
-                title=f"{selected_feature} Distribution by Crop",
-                height=500
-            )
+            selected_feature = st.selectbox("Select feature:", numerical_features, key="dist_feat")
+            fig = px.box(df_train, x='Name', y=selected_feature, height=500)
+            fig.update_layout(margin=dict(l=20, r=20, t=20, b=20))
             st.plotly_chart(fig, use_container_width=True)
     
     # ========================================================================
     # PAGE: ABOUT
     # ========================================================================
-    elif page == "ℹ️ About":
-        st.title("ℹ️ About This System")
-        
-        st.markdown("""
-        ## 🌾 Sensor-Based Crop Recommendation & Yield Optimization System
-        
-        ### 📊 System Overview
-        
-        This is a production-ready machine learning system that:
-        
-        - **Recommends optimal crops** based on sensor and soil data
-        - **Predicts crop yield** with high accuracy
-        - **Handles incomplete data** using intelligent estimation
-        - **Provides optimization ranges** for each crop
-        
-        ### 🎯 Performance Metrics
-        
-        | Metric | Value |
-        |--------|-------|
-        | Classification Accuracy | 100% |
-        | Regression R² Score | 0.9931 |
-        | Regression RMSE | 1.30 units |
-        | Supported Crops | 22 varieties |
-        | Input Features | 17 parameters |
-        
-        ### 🔬 Machine Learning Models
-        
-        **Classification (Crop Recommendation)**
-        - Algorithm: RandomForestClassifier (200 trees)
-        - Task: Predict crop name from sensor data
-        - Accuracy: 100% on test set
-        
-        **Regression (Yield Prediction)**
-        - Algorithm: RandomForestRegressor (200 trees)
-        - Task: Predict crop yield value
-        - R² Score: 0.9931 (explains 99.31% of variance)
-        
-        ### 🧠 Missing Value Estimation
-        
-        When partial data is provided:
-        1. **KNN Similarity Search** finds 10 nearest similar samples
-        2. **High-Yield Filtering** prioritizes samples with good yields
-        3. **Range Estimation** provides min-max-mean-std ranges
-        4. **Smart Recommendation** suggests optimal values
-        
-        ### 📈 Dataset
-        
-        - **Size**: 15,400 samples
-        - **Crops**: 22 unique varieties
-        - **Features**: 17 input parameters
-        - **Balance**: Perfectly balanced (700 samples per crop)
-        - **Yield Range**: 0.77 - 66.62 units
-        
-        ### 🌱 Supported Crops
-        """)
-        
-        # Display crops in columns
-        crops = sorted(df_train['Name'].unique().tolist())
-        cols = st.columns(3)
-        for idx, crop in enumerate(crops):
-            with cols[idx % 3]:
-                st.write(f"• {crop}")
-        
-        st.markdown("""
-        ### 📚 Features
-        
-        **Numerical Features (12)**
-        - Temperature, Rainfall, pH
-        - Light_Hours, Light_Intensity, Rh
-        - Nitrogen, Phosphorus, Potassium
-        - N_Ratio, P_Ratio, K_Ratio
-        
-        **Categorical Features (5)**
-        - Fertility (Low/Moderate/High)
-        - Photoperiod
-        - Category_pH
-        - Soil_Type (Loam/Clay/Sandy)
-        - Season
-        
-        ### 🚀 How to Use
-        
-        1. **Single Prediction**: Input sensor data to get recommendations
-        2. **Batch Prediction**: Upload CSV for multi-field analysis
-        3. **Feature Analysis**: Explore feature importance and optimization ranges
-        
-        ### 📝 Technical Stack
-        
-        - **ML Framework**: scikit-learn
-        - **Web Interface**: Streamlit
-        - **Data Processing**: pandas, numpy
-        - **Visualization**: Plotly
-        - **API**: FastAPI
-        
-        ### 📞 Support
-        
-        For detailed documentation, see the project README and documentation files.
-        """)
+    elif page == "About":
+        st.title("About CropSense")
+
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.metric("Classification Accuracy", "100%")
+        with col2:
+            st.metric("Yield R²", "0.9946")
+        with col3:
+            st.metric("Supported Crops", "22")
+        with col4:
+            st.metric("Input Features", "17")
+
+        st.divider()
+
+        col_left, col_right = st.columns(2)
+        with col_left:
+            st.subheader("Models")
+            st.markdown("- **Classification**: RandomForestClassifier (200 trees) – 100% test accuracy")
+            st.markdown("- **Regression**: RandomForestRegressor (200 trees) – R² = 0.9946")
+            st.markdown("- **Imputation**: KNN-based similarity search (k=10) with high-yield filtering")
+
+            st.subheader("Dataset")
+            st.markdown("- 15,400 samples (700 per crop)")
+            st.markdown("- 17 input features (12 numerical + 5 categorical)")
+            st.markdown("- 2 targets: crop name + yield")
+            st.markdown("- Yield range: 0.77 – 66.62 units")
+
+        with col_right:
+            st.subheader("Supported Crops")
+            crops = sorted(df_train['Name'].unique().tolist())
+            for crop in crops:
+                st.caption(crop)
+
+        st.divider()
+        st.caption("Built with scikit-learn, Streamlit, Plotly. See README.md for API and documentation.")
 
 
 if __name__ == "__main__":
