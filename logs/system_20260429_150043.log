@@ -1,0 +1,302 @@
+2026-04-29 15:00:44 - CropRecommendation.preprocessing - INFO - [preprocessing.py:45] - CropDataProcessor initialized
+2026-04-29 15:00:44 - CropRecommendation.preprocessing - INFO - [preprocessing.py:223] - Preprocessor loaded from /Users/muharremsimsek/Desktop/Capstone 2/models
+2026-04-29 15:00:44 - CropRecommendation.preprocessing - INFO - [preprocessing.py:55] - Loading data from /Users/muharremsimsek/Desktop/Capstone 2/data/Soil_Nutrients.csv
+2026-04-29 15:00:44 - CropRecommendation.preprocessing - INFO - [preprocessing.py:57] - Data shape: (15400, 19)
+2026-04-29 15:00:44 - CropRecommendation.preprocessing - INFO - [preprocessing.py:58] - Columns: ['Name', 'Fertility', 'Photoperiod', 'Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh', 'Nitrogen', 'Phosphorus', 'Potassium', 'Yield', 'Category_pH', 'Soil_Type', 'Season', 'N_Ratio', 'P_Ratio', 'K_Ratio']
+2026-04-29 15:00:44 - CropRecommendation.preprocessing - INFO - [preprocessing.py:117] - Missing values before handling: 0
+2026-04-29 15:00:44 - CropRecommendation.preprocessing - INFO - [preprocessing.py:137] - Missing values after handling: 0
+2026-04-29 15:00:44 - CropRecommendation.preprocessing - INFO - [preprocessing.py:101] - Categorical features: ['Fertility', 'Photoperiod', 'Category_pH', 'Soil_Type', 'Season']
+2026-04-29 15:00:44 - CropRecommendation.preprocessing - INFO - [preprocessing.py:102] - Numerical features: ['Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh', 'Nitrogen', 'Phosphorus', 'Potassium', 'N_Ratio', 'P_Ratio', 'K_Ratio']
+2026-04-29 15:00:44 - CropRecommendation.preprocessing - INFO - [preprocessing.py:101] - Categorical features: ['Fertility', 'Photoperiod', 'Category_pH', 'Soil_Type', 'Season']
+2026-04-29 15:00:44 - CropRecommendation.preprocessing - INFO - [preprocessing.py:102] - Numerical features: ['Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh', 'Nitrogen', 'Phosphorus', 'Potassium', 'N_Ratio', 'P_Ratio', 'K_Ratio']
+2026-04-29 15:00:44 - CropRecommendation.preprocessing - INFO - [preprocessing.py:161] - Feature matrix shape: (15400, 17)
+2026-04-29 15:00:44 - CropRecommendation.preprocessing - INFO - [preprocessing.py:162] - Crop target shape: (15400,)
+2026-04-29 15:00:44 - CropRecommendation.preprocessing - INFO - [preprocessing.py:163] - Yield target shape: (15400,)
+2026-04-29 15:00:44 - CropRecommendation.preprocessing - INFO - [preprocessing.py:164] - Unique crops: 22
+2026-04-29 15:00:44 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (15400, 17)
+2026-04-29 15:00:44 - CropRecommendation.recommender - INFO - [recommender.py:53] - IntelligentRecommender initialized with KNN model
+2026-04-29 15:00:44 - CropRecommendation.predict - INFO - [predict.py:44] - CropPredictor initialized
+2026-04-29 15:02:46 - CropRecommendation.predict - INFO - [predict.py:168] - Input is complete
+2026-04-29 15:02:46 - CropRecommendation.predict - INFO - [predict.py:56] - Making prediction from complete data
+2026-04-29 15:02:46 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:02:46 - CropRecommendation.streamlit_app - ERROR - [streamlit_app.py:425] - Prediction error: The feature names should match those that were passed during fit.
+Feature names must be in the same order as they were in fit.
+
+2026-04-29 15:03:10 - CropRecommendation.predict - INFO - [predict.py:168] - Input is complete
+2026-04-29 15:03:10 - CropRecommendation.predict - INFO - [predict.py:56] - Making prediction from complete data
+2026-04-29 15:03:10 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:03:10 - CropRecommendation.streamlit_app - ERROR - [streamlit_app.py:425] - Prediction error: The feature names should match those that were passed during fit.
+Feature names must be in the same order as they were in fit.
+
+2026-04-29 15:03:22 - CropRecommendation.predict - INFO - [predict.py:168] - Input is complete
+2026-04-29 15:03:22 - CropRecommendation.predict - INFO - [predict.py:56] - Making prediction from complete data
+2026-04-29 15:03:22 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:03:22 - CropRecommendation.streamlit_app - ERROR - [streamlit_app.py:425] - Prediction error: The feature names should match those that were passed during fit.
+Feature names must be in the same order as they were in fit.
+
+2026-04-29 15:05:30 - CropRecommendation.predict - INFO - [predict.py:168] - Input is complete
+2026-04-29 15:05:30 - CropRecommendation.predict - INFO - [predict.py:56] - Making prediction from complete data
+2026-04-29 15:05:30 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:05:30 - CropRecommendation.streamlit_app - ERROR - [streamlit_app.py:425] - Prediction error: The feature names should match those that were passed during fit.
+Feature names must be in the same order as they were in fit.
+
+2026-04-29 15:05:52 - CropRecommendation.predict - INFO - [predict.py:171] - Input is partial (14 missing features)
+2026-04-29 15:05:52 - CropRecommendation.predict - INFO - [predict.py:106] - Making prediction from partial data: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:05:52 - CropRecommendation.recommender - INFO - [recommender.py:195] - Recommending crops for input: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:05:52 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 19.8710713421344, 'Rainfall': 1785.52982520806, 'pH': 6.85720763747703}
+2026-04-29 15:05:52 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:05:52 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 0 similar high-yield samples
+2026-04-29 15:05:52 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 19.8710713421344, 'Rainfall': 1785.52982520806, 'pH': 6.85720763747703}
+2026-04-29 15:05:52 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:05:52 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 10 similar high-yield samples
+2026-04-29 15:05:52 - CropRecommendation.recommender - INFO - [recommender.py:233] - Top 3 recommendations: ['Cress']
+2026-04-29 15:05:52 - CropRecommendation.recommender - INFO - [recommender.py:160] - Estimating optimal values for missing features...
+2026-04-29 15:05:52 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 19.8710713421344, 'Rainfall': 1785.52982520806, 'pH': 6.85720763747703}
+2026-04-29 15:05:52 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:05:53 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 0 similar high-yield samples
+2026-04-29 15:05:53 - CropRecommendation.recommender - WARNING - [recommender.py:165] - No high-yield similar samples found, using general median values
+2026-04-29 15:05:53 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 19.8710713421344, 'Rainfall': 1785.52982520806, 'pH': 6.85720763747703}
+2026-04-29 15:05:53 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:05:53 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 10 similar high-yield samples
+2026-04-29 15:05:53 - CropRecommendation.recommender - INFO - [recommender.py:178] - Estimated values for 14 missing features
+2026-04-29 15:05:53 - CropRecommendation.recommender - INFO - [recommender.py:249] - Predicting yield for crop 'Cress'
+2026-04-29 15:05:53 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 19.8710713421344, 'Rainfall': 1785.52982520806, 'pH': 6.85720763747703}
+2026-04-29 15:05:53 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:05:53 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 0 similar high-yield samples
+2026-04-29 15:05:53 - CropRecommendation.recommender - WARNING - [recommender.py:256] - No similar samples found for crop 'Cress', using training data median
+2026-04-29 15:05:53 - CropRecommendation.recommender - INFO - [recommender.py:279] - Getting optimization recommendations for crop 'Cress'
+2026-04-29 15:05:53 - CropRecommendation.recommender - INFO - [recommender.py:308] - Generated optimization recommendations for 17 features
+2026-04-29 15:05:53 - CropRecommendation.predict - INFO - [predict.py:150] - Partial prediction complete. Top crop: Cress, Yield: 21.23
+2026-04-29 15:05:53 - CropRecommendation.predict - INFO - [predict.py:151] - Estimated 14 missing features
+2026-04-29 15:06:08 - CropRecommendation.predict - INFO - [predict.py:171] - Input is partial (14 missing features)
+2026-04-29 15:06:08 - CropRecommendation.predict - INFO - [predict.py:106] - Making prediction from partial data: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:08 - CropRecommendation.recommender - INFO - [recommender.py:195] - Recommending crops for input: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:08 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 18.4028288373939, 'Rainfall': 1237.6330186911, 'pH': 7.2558367915963}
+2026-04-29 15:06:08 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:08 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 3 similar high-yield samples
+2026-04-29 15:06:08 - CropRecommendation.recommender - INFO - [recommender.py:233] - Top 3 recommendations: ['Broccoli', 'Cauliflowers']
+2026-04-29 15:06:08 - CropRecommendation.recommender - INFO - [recommender.py:160] - Estimating optimal values for missing features...
+2026-04-29 15:06:08 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 18.4028288373939, 'Rainfall': 1237.6330186911, 'pH': 7.2558367915963}
+2026-04-29 15:06:08 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:08 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 1 similar high-yield samples
+2026-04-29 15:06:09 - CropRecommendation.recommender - INFO - [recommender.py:178] - Estimated values for 14 missing features
+2026-04-29 15:06:09 - CropRecommendation.recommender - INFO - [recommender.py:249] - Predicting yield for crop 'Broccoli'
+2026-04-29 15:06:09 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 18.4028288373939, 'Rainfall': 1237.6330186911, 'pH': 7.2558367915963}
+2026-04-29 15:06:09 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:09 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 14 similar high-yield samples
+2026-04-29 15:06:09 - CropRecommendation.recommender - INFO - [recommender.py:263] - Predicted yield: 23.58
+2026-04-29 15:06:09 - CropRecommendation.recommender - INFO - [recommender.py:279] - Getting optimization recommendations for crop 'Broccoli'
+2026-04-29 15:06:09 - CropRecommendation.recommender - INFO - [recommender.py:308] - Generated optimization recommendations for 17 features
+2026-04-29 15:06:09 - CropRecommendation.predict - INFO - [predict.py:150] - Partial prediction complete. Top crop: Broccoli, Yield: 23.58
+2026-04-29 15:06:09 - CropRecommendation.predict - INFO - [predict.py:151] - Estimated 14 missing features
+2026-04-29 15:06:19 - CropRecommendation.predict - INFO - [predict.py:171] - Input is partial (14 missing features)
+2026-04-29 15:06:19 - CropRecommendation.predict - INFO - [predict.py:106] - Making prediction from partial data: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:195] - Recommending crops for input: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 20.6434327059971, 'Rainfall': 2040.07712980802, 'pH': 6.38220925220086}
+2026-04-29 15:06:19 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 0 similar high-yield samples
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 20.6434327059971, 'Rainfall': 2040.07712980802, 'pH': 6.38220925220086}
+2026-04-29 15:06:19 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 10 similar high-yield samples
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:233] - Top 3 recommendations: ['Cress']
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:160] - Estimating optimal values for missing features...
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 20.6434327059971, 'Rainfall': 2040.07712980802, 'pH': 6.38220925220086}
+2026-04-29 15:06:19 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 0 similar high-yield samples
+2026-04-29 15:06:19 - CropRecommendation.recommender - WARNING - [recommender.py:165] - No high-yield similar samples found, using general median values
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 20.6434327059971, 'Rainfall': 2040.07712980802, 'pH': 6.38220925220086}
+2026-04-29 15:06:19 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 10 similar high-yield samples
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:178] - Estimated values for 14 missing features
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:249] - Predicting yield for crop 'Cress'
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 20.6434327059971, 'Rainfall': 2040.07712980802, 'pH': 6.38220925220086}
+2026-04-29 15:06:19 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 0 similar high-yield samples
+2026-04-29 15:06:19 - CropRecommendation.recommender - WARNING - [recommender.py:256] - No similar samples found for crop 'Cress', using training data median
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:279] - Getting optimization recommendations for crop 'Cress'
+2026-04-29 15:06:19 - CropRecommendation.recommender - INFO - [recommender.py:308] - Generated optimization recommendations for 17 features
+2026-04-29 15:06:19 - CropRecommendation.predict - INFO - [predict.py:150] - Partial prediction complete. Top crop: Cress, Yield: 21.23
+2026-04-29 15:06:19 - CropRecommendation.predict - INFO - [predict.py:151] - Estimated 14 missing features
+2026-04-29 15:06:23 - CropRecommendation.predict - INFO - [predict.py:171] - Input is partial (14 missing features)
+2026-04-29 15:06:23 - CropRecommendation.predict - INFO - [predict.py:106] - Making prediction from partial data: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:23 - CropRecommendation.recommender - INFO - [recommender.py:195] - Recommending crops for input: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:23 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 18.4457066383161, 'Rainfall': 692.181521354307, 'pH': 6.27223119580858}
+2026-04-29 15:06:23 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:23 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 8 similar high-yield samples
+2026-04-29 15:06:23 - CropRecommendation.recommender - INFO - [recommender.py:233] - Top 3 recommendations: ['Broccoli']
+2026-04-29 15:06:23 - CropRecommendation.recommender - INFO - [recommender.py:160] - Estimating optimal values for missing features...
+2026-04-29 15:06:23 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 18.4457066383161, 'Rainfall': 692.181521354307, 'pH': 6.27223119580858}
+2026-04-29 15:06:23 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:23 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 4 similar high-yield samples
+2026-04-29 15:06:23 - CropRecommendation.recommender - INFO - [recommender.py:178] - Estimated values for 14 missing features
+2026-04-29 15:06:23 - CropRecommendation.recommender - INFO - [recommender.py:249] - Predicting yield for crop 'Broccoli'
+2026-04-29 15:06:23 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 18.4457066383161, 'Rainfall': 692.181521354307, 'pH': 6.27223119580858}
+2026-04-29 15:06:23 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:23 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 29 similar high-yield samples
+2026-04-29 15:06:23 - CropRecommendation.recommender - INFO - [recommender.py:263] - Predicted yield: 23.56
+2026-04-29 15:06:23 - CropRecommendation.recommender - INFO - [recommender.py:279] - Getting optimization recommendations for crop 'Broccoli'
+2026-04-29 15:06:23 - CropRecommendation.recommender - INFO - [recommender.py:308] - Generated optimization recommendations for 17 features
+2026-04-29 15:06:23 - CropRecommendation.predict - INFO - [predict.py:150] - Partial prediction complete. Top crop: Broccoli, Yield: 23.56
+2026-04-29 15:06:23 - CropRecommendation.predict - INFO - [predict.py:151] - Estimated 14 missing features
+2026-04-29 15:06:24 - CropRecommendation.predict - INFO - [predict.py:171] - Input is partial (14 missing features)
+2026-04-29 15:06:24 - CropRecommendation.predict - INFO - [predict.py:106] - Making prediction from partial data: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:24 - CropRecommendation.recommender - INFO - [recommender.py:195] - Recommending crops for input: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:24 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 23.0264282493273, 'Rainfall': 683.168304194257, 'pH': 6.62956428809126}
+2026-04-29 15:06:24 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:24 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 2 similar high-yield samples
+2026-04-29 15:06:24 - CropRecommendation.recommender - INFO - [recommender.py:233] - Top 3 recommendations: ['Broccoli']
+2026-04-29 15:06:24 - CropRecommendation.recommender - INFO - [recommender.py:160] - Estimating optimal values for missing features...
+2026-04-29 15:06:24 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 23.0264282493273, 'Rainfall': 683.168304194257, 'pH': 6.62956428809126}
+2026-04-29 15:06:24 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:24 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 0 similar high-yield samples
+2026-04-29 15:06:24 - CropRecommendation.recommender - WARNING - [recommender.py:165] - No high-yield similar samples found, using general median values
+2026-04-29 15:06:24 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 23.0264282493273, 'Rainfall': 683.168304194257, 'pH': 6.62956428809126}
+2026-04-29 15:06:24 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:24 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 10 similar high-yield samples
+2026-04-29 15:06:24 - CropRecommendation.recommender - INFO - [recommender.py:178] - Estimated values for 14 missing features
+2026-04-29 15:06:24 - CropRecommendation.recommender - INFO - [recommender.py:249] - Predicting yield for crop 'Broccoli'
+2026-04-29 15:06:24 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 23.0264282493273, 'Rainfall': 683.168304194257, 'pH': 6.62956428809126}
+2026-04-29 15:06:24 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:24 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 11 similar high-yield samples
+2026-04-29 15:06:24 - CropRecommendation.recommender - INFO - [recommender.py:263] - Predicted yield: 23.55
+2026-04-29 15:06:24 - CropRecommendation.recommender - INFO - [recommender.py:279] - Getting optimization recommendations for crop 'Broccoli'
+2026-04-29 15:06:24 - CropRecommendation.recommender - INFO - [recommender.py:308] - Generated optimization recommendations for 17 features
+2026-04-29 15:06:24 - CropRecommendation.predict - INFO - [predict.py:150] - Partial prediction complete. Top crop: Broccoli, Yield: 23.55
+2026-04-29 15:06:24 - CropRecommendation.predict - INFO - [predict.py:151] - Estimated 14 missing features
+2026-04-29 15:06:25 - CropRecommendation.predict - INFO - [predict.py:171] - Input is partial (14 missing features)
+2026-04-29 15:06:25 - CropRecommendation.predict - INFO - [predict.py:106] - Making prediction from partial data: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:25 - CropRecommendation.recommender - INFO - [recommender.py:195] - Recommending crops for input: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:25 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 17.8078299284296, 'Rainfall': 1293.63572064607, 'pH': 6.45559909912905}
+2026-04-29 15:06:25 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:25 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 14 similar high-yield samples
+2026-04-29 15:06:25 - CropRecommendation.recommender - INFO - [recommender.py:233] - Top 3 recommendations: ['Cauliflowers', 'Broccoli']
+2026-04-29 15:06:25 - CropRecommendation.recommender - INFO - [recommender.py:160] - Estimating optimal values for missing features...
+2026-04-29 15:06:25 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 17.8078299284296, 'Rainfall': 1293.63572064607, 'pH': 6.45559909912905}
+2026-04-29 15:06:25 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:25 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 9 similar high-yield samples
+2026-04-29 15:06:25 - CropRecommendation.recommender - INFO - [recommender.py:178] - Estimated values for 14 missing features
+2026-04-29 15:06:25 - CropRecommendation.recommender - INFO - [recommender.py:249] - Predicting yield for crop 'Cauliflowers'
+2026-04-29 15:06:25 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 17.8078299284296, 'Rainfall': 1293.63572064607, 'pH': 6.45559909912905}
+2026-04-29 15:06:25 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:25 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 35 similar high-yield samples
+2026-04-29 15:06:25 - CropRecommendation.recommender - INFO - [recommender.py:263] - Predicted yield: 23.59
+2026-04-29 15:06:25 - CropRecommendation.recommender - INFO - [recommender.py:279] - Getting optimization recommendations for crop 'Cauliflowers'
+2026-04-29 15:06:25 - CropRecommendation.recommender - INFO - [recommender.py:308] - Generated optimization recommendations for 17 features
+2026-04-29 15:06:25 - CropRecommendation.predict - INFO - [predict.py:150] - Partial prediction complete. Top crop: Cauliflowers, Yield: 23.59
+2026-04-29 15:06:25 - CropRecommendation.predict - INFO - [predict.py:151] - Estimated 14 missing features
+2026-04-29 15:06:26 - CropRecommendation.predict - INFO - [predict.py:171] - Input is partial (14 missing features)
+2026-04-29 15:06:26 - CropRecommendation.predict - INFO - [predict.py:106] - Making prediction from partial data: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:195] - Recommending crops for input: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 16.3251771156939, 'Rainfall': 757.020539914151, 'pH': 6.58005222554686}
+2026-04-29 15:06:26 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 3 similar high-yield samples
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:233] - Top 3 recommendations: ['Broccoli']
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:160] - Estimating optimal values for missing features...
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 16.3251771156939, 'Rainfall': 757.020539914151, 'pH': 6.58005222554686}
+2026-04-29 15:06:26 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 0 similar high-yield samples
+2026-04-29 15:06:26 - CropRecommendation.recommender - WARNING - [recommender.py:165] - No high-yield similar samples found, using general median values
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 16.3251771156939, 'Rainfall': 757.020539914151, 'pH': 6.58005222554686}
+2026-04-29 15:06:26 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 10 similar high-yield samples
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:178] - Estimated values for 14 missing features
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:249] - Predicting yield for crop 'Broccoli'
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 16.3251771156939, 'Rainfall': 757.020539914151, 'pH': 6.58005222554686}
+2026-04-29 15:06:26 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 20 similar high-yield samples
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:263] - Predicted yield: 23.57
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:279] - Getting optimization recommendations for crop 'Broccoli'
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:308] - Generated optimization recommendations for 17 features
+2026-04-29 15:06:26 - CropRecommendation.predict - INFO - [predict.py:150] - Partial prediction complete. Top crop: Broccoli, Yield: 23.57
+2026-04-29 15:06:26 - CropRecommendation.predict - INFO - [predict.py:151] - Estimated 14 missing features
+2026-04-29 15:06:26 - CropRecommendation.predict - INFO - [predict.py:171] - Input is partial (14 missing features)
+2026-04-29 15:06:26 - CropRecommendation.predict - INFO - [predict.py:106] - Making prediction from partial data: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:195] - Recommending crops for input: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 16.7925614372684, 'Rainfall': 1205.33036537054, 'pH': 6.58091545819652}
+2026-04-29 15:06:26 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 17 similar high-yield samples
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:233] - Top 3 recommendations: ['Broccoli', 'Cauliflowers']
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:160] - Estimating optimal values for missing features...
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 16.7925614372684, 'Rainfall': 1205.33036537054, 'pH': 6.58091545819652}
+2026-04-29 15:06:26 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 7 similar high-yield samples
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:178] - Estimated values for 14 missing features
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:249] - Predicting yield for crop 'Broccoli'
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 16.7925614372684, 'Rainfall': 1205.33036537054, 'pH': 6.58091545819652}
+2026-04-29 15:06:26 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 39 similar high-yield samples
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:263] - Predicted yield: 23.54
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:279] - Getting optimization recommendations for crop 'Broccoli'
+2026-04-29 15:06:26 - CropRecommendation.recommender - INFO - [recommender.py:308] - Generated optimization recommendations for 17 features
+2026-04-29 15:06:26 - CropRecommendation.predict - INFO - [predict.py:150] - Partial prediction complete. Top crop: Broccoli, Yield: 23.54
+2026-04-29 15:06:26 - CropRecommendation.predict - INFO - [predict.py:151] - Estimated 14 missing features
+2026-04-29 15:06:27 - CropRecommendation.predict - INFO - [predict.py:171] - Input is partial (14 missing features)
+2026-04-29 15:06:27 - CropRecommendation.predict - INFO - [predict.py:106] - Making prediction from partial data: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:195] - Recommending crops for input: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 16.1293003780402, 'Rainfall': 669.706644068322, 'pH': 7.06741510318584}
+2026-04-29 15:06:27 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 0 similar high-yield samples
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 16.1293003780402, 'Rainfall': 669.706644068322, 'pH': 7.06741510318584}
+2026-04-29 15:06:27 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 10 similar high-yield samples
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:233] - Top 3 recommendations: ['Cabbage']
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:160] - Estimating optimal values for missing features...
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 16.1293003780402, 'Rainfall': 669.706644068322, 'pH': 7.06741510318584}
+2026-04-29 15:06:27 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 0 similar high-yield samples
+2026-04-29 15:06:27 - CropRecommendation.recommender - WARNING - [recommender.py:165] - No high-yield similar samples found, using general median values
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 16.1293003780402, 'Rainfall': 669.706644068322, 'pH': 7.06741510318584}
+2026-04-29 15:06:27 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 10 similar high-yield samples
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:178] - Estimated values for 14 missing features
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:249] - Predicting yield for crop 'Cabbage'
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 16.1293003780402, 'Rainfall': 669.706644068322, 'pH': 7.06741510318584}
+2026-04-29 15:06:27 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 4 similar high-yield samples
+2026-04-29 15:06:27 - CropRecommendation.recommender - WARNING - [recommender.py:256] - No similar samples found for crop 'Cabbage', using training data median
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:279] - Getting optimization recommendations for crop 'Cabbage'
+2026-04-29 15:06:27 - CropRecommendation.recommender - INFO - [recommender.py:308] - Generated optimization recommendations for 17 features
+2026-04-29 15:06:27 - CropRecommendation.predict - INFO - [predict.py:150] - Partial prediction complete. Top crop: Cabbage, Yield: 21.23
+2026-04-29 15:06:27 - CropRecommendation.predict - INFO - [predict.py:151] - Estimated 14 missing features
+2026-04-29 15:06:28 - CropRecommendation.predict - INFO - [predict.py:171] - Input is partial (14 missing features)
+2026-04-29 15:06:28 - CropRecommendation.predict - INFO - [predict.py:106] - Making prediction from partial data: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:195] - Recommending crops for input: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 17.0052295452354, 'Rainfall': 826.658477111422, 'pH': 6.35231848588276}
+2026-04-29 15:06:28 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 9 similar high-yield samples
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:233] - Top 3 recommendations: ['Broccoli']
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:160] - Estimating optimal values for missing features...
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 17.0052295452354, 'Rainfall': 826.658477111422, 'pH': 6.35231848588276}
+2026-04-29 15:06:28 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 4 similar high-yield samples
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:178] - Estimated values for 14 missing features
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:249] - Predicting yield for crop 'Broccoli'
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 17.0052295452354, 'Rainfall': 826.658477111422, 'pH': 6.35231848588276}
+2026-04-29 15:06:28 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 32 similar high-yield samples
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:263] - Predicted yield: 23.54
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:279] - Getting optimization recommendations for crop 'Broccoli'
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:308] - Generated optimization recommendations for 17 features
+2026-04-29 15:06:28 - CropRecommendation.predict - INFO - [predict.py:150] - Partial prediction complete. Top crop: Broccoli, Yield: 23.54
+2026-04-29 15:06:28 - CropRecommendation.predict - INFO - [predict.py:151] - Estimated 14 missing features
+2026-04-29 15:06:28 - CropRecommendation.predict - INFO - [predict.py:171] - Input is partial (14 missing features)
+2026-04-29 15:06:28 - CropRecommendation.predict - INFO - [predict.py:106] - Making prediction from partial data: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:195] - Recommending crops for input: ['Temperature', 'Rainfall', 'pH']
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 23.6938113289241, 'Rainfall': 1331.23157336494, 'pH': 5.87727673919955}
+2026-04-29 15:06:28 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 15 similar high-yield samples
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:233] - Top 3 recommendations: ['Broccoli']
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:160] - Estimating optimal values for missing features...
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 23.6938113289241, 'Rainfall': 1331.23157336494, 'pH': 5.87727673919955}
+2026-04-29 15:06:28 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 9 similar high-yield samples
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:178] - Estimated values for 14 missing features
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:249] - Predicting yield for crop 'Broccoli'
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:108] - Finding similar samples for input: {'Temperature': 23.6938113289241, 'Rainfall': 1331.23157336494, 'pH': 5.87727673919955}
+2026-04-29 15:06:28 - CropRecommendation.preprocessing - INFO - [preprocessing.py:196] - Encoded and scaled feature matrix shape: (1, 17)
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:145] - Found 31 similar high-yield samples
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:263] - Predicted yield: 23.55
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:279] - Getting optimization recommendations for crop 'Broccoli'
+2026-04-29 15:06:28 - CropRecommendation.recommender - INFO - [recommender.py:308] - Generated optimization recommendations for 17 features
+2026-04-29 15:06:28 - CropRecommendation.predict - INFO - [predict.py:150] - Partial prediction complete. Top crop: Broccoli, Yield: 23.55
+2026-04-29 15:06:28 - CropRecommendation.predict - INFO - [predict.py:151] - Estimated 14 missing features

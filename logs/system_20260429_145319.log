@@ -1,0 +1,27 @@
+2026-04-29 14:53:20 - CropRecommendation.preprocessing - INFO - [preprocessing.py:45] - CropDataProcessor initialized
+2026-04-29 14:53:20 - CropRecommendation.streamlit_app - ERROR - [streamlit_app.py:120] - System loading error: IntelligentRecommender.__init__() missing 4 required positional arguments: 'feature_columns', 'numerical_features', 'categorical_features', and 'preprocessor'
+Traceback (most recent call last):
+  File "/Users/muharremsimsek/Desktop/Capstone 2/.venv/lib/python3.11/site-packages/streamlit/runtime/caching/cache_utils.py", line 264, in _get_or_create_cached_value
+    cached_result = cache.read_result(value_key)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/muharremsimsek/Desktop/Capstone 2/.venv/lib/python3.11/site-packages/streamlit/runtime/caching/cache_resource_api.py", line 500, in read_result
+    raise CacheKeyNotFoundError()
+streamlit.runtime.caching.cache_errors.CacheKeyNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/muharremsimsek/Desktop/Capstone 2/.venv/lib/python3.11/site-packages/streamlit/runtime/caching/cache_utils.py", line 312, in _handle_cache_miss
+    cached_result = cache.read_result(value_key)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/muharremsimsek/Desktop/Capstone 2/.venv/lib/python3.11/site-packages/streamlit/runtime/caching/cache_resource_api.py", line 500, in read_result
+    raise CacheKeyNotFoundError()
+streamlit.runtime.caching.cache_errors.CacheKeyNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/muharremsimsek/Desktop/Capstone 2/streamlit_app.py", line 96, in load_system
+    recommender = IntelligentRecommender(df_train, classifier, regressor, knn)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: IntelligentRecommender.__init__() missing 4 required positional arguments: 'feature_columns', 'numerical_features', 'categorical_features', and 'preprocessor'

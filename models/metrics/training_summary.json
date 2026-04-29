@@ -1,0 +1,190 @@
+{
+  "classifier_best_model": "ExtraTrees",
+  "regressor_best_model": "ExtraTrees",
+  "classifier_experiments": [
+    {
+      "task": "classification",
+      "model_type": "ExtraTrees",
+      "train_accuracy": 1.0,
+      "test_accuracy": 1.0,
+      "cv_mean": 1.0,
+      "cv_std": 0.0,
+      "classification_report": "                precision    recall  f1-score   support\n\n       Arugula       1.00      1.00      1.00       140\n     Asparagus       1.00      1.00      1.00       140\n          Beet       1.00      1.00      1.00       140\n      Broccoli       1.00      1.00      1.00       140\n       Cabbage       1.00      1.00      1.00       140\n  Cauliflowers       1.00      1.00      1.00       140\n         Chard       1.00      1.00      1.00       140\nChilli Peppers       1.00      1.00      1.00       140\n         Cress       1.00      1.00      1.00       140\n     Cucumbers       1.00      1.00      1.00       140\n     Eggplants       1.00      1.00      1.00       140\n        Endive       1.00      1.00      1.00       140\n        Grapes       1.00      1.00      1.00       140\n    Green Peas       1.00      1.00      1.00       140\n          Kale       1.00      1.00      1.00       140\n       Lettuce       1.00      1.00      1.00       140\n      Potatoes       1.00      1.00      1.00       140\n     Radicchio       1.00      1.00      1.00       140\n       Spinach       1.00      1.00      1.00       140\n    Strawberry       1.00      1.00      1.00       140\n      Tomatoes       1.00      1.00      1.00       140\n    Watermelon       1.00      1.00      1.00       140\n\n      accuracy                           1.00      3080\n     macro avg       1.00      1.00      1.00      3080\n  weighted avg       1.00      1.00      1.00      3080\n",
+      "feature_importance": [
+        {
+          "feature": "N_Ratio",
+          "importance": 0.10696103578799555
+        },
+        {
+          "feature": "Potassium",
+          "importance": 0.10103486867087214
+        },
+        {
+          "feature": "Rh",
+          "importance": 0.08926176690291444
+        },
+        {
+          "feature": "Nitrogen",
+          "importance": 0.0891597366452296
+        },
+        {
+          "feature": "Phosphorus",
+          "importance": 0.08899304860674377
+        },
+        {
+          "feature": "K_Ratio",
+          "importance": 0.07684575325590093
+        },
+        {
+          "feature": "Soil_Type",
+          "importance": 0.07110095350088651
+        },
+        {
+          "feature": "Fertility",
+          "importance": 0.0628232428611797
+        },
+        {
+          "feature": "Light_Hours",
+          "importance": 0.061316885113257565
+        },
+        {
+          "feature": "P_Ratio",
+          "importance": 0.05677009399478252
+        },
+        {
+          "feature": "Light_Intensity",
+          "importance": 0.05579307157967642
+        },
+        {
+          "feature": "Rainfall",
+          "importance": 0.04747847330313218
+        },
+        {
+          "feature": "Temperature",
+          "importance": 0.02510360721212906
+        },
+        {
+          "feature": "pH",
+          "importance": 0.02117643281540844
+        },
+        {
+          "feature": "Season",
+          "importance": 0.019634248853990066
+        },
+        {
+          "feature": "Category_pH",
+          "importance": 0.013965197077361364
+        },
+        {
+          "feature": "Photoperiod",
+          "importance": 0.012581583818539696
+        }
+      ]
+    },
+    {
+      "task": "classification",
+      "model_type": "RandomForest",
+      "train_accuracy": 1.0,
+      "test_accuracy": 1.0,
+      "cv_mean": 0.9998376359798669,
+      "cv_std": 0.00022961739931370956,
+      "classification_report": "                precision    recall  f1-score   support\n\n       Arugula       1.00      1.00      1.00       140\n     Asparagus       1.00      1.00      1.00       140\n          Beet       1.00      1.00      1.00       140\n      Broccoli       1.00      1.00      1.00       140\n       Cabbage       1.00      1.00      1.00       140\n  Cauliflowers       1.00      1.00      1.00       140\n         Chard       1.00      1.00      1.00       140\nChilli Peppers       1.00      1.00      1.00       140\n         Cress       1.00      1.00      1.00       140\n     Cucumbers       1.00      1.00      1.00       140\n     Eggplants       1.00      1.00      1.00       140\n        Endive       1.00      1.00      1.00       140\n        Grapes       1.00      1.00      1.00       140\n    Green Peas       1.00      1.00      1.00       140\n          Kale       1.00      1.00      1.00       140\n       Lettuce       1.00      1.00      1.00       140\n      Potatoes       1.00      1.00      1.00       140\n     Radicchio       1.00      1.00      1.00       140\n       Spinach       1.00      1.00      1.00       140\n    Strawberry       1.00      1.00      1.00       140\n      Tomatoes       1.00      1.00      1.00       140\n    Watermelon       1.00      1.00      1.00       140\n\n      accuracy                           1.00      3080\n     macro avg       1.00      1.00      1.00      3080\n  weighted avg       1.00      1.00      1.00      3080\n"
+    }
+  ],
+  "regressor_experiments": [
+    {
+      "task": "regression",
+      "model_type": "ExtraTrees",
+      "train_rmse": 4.3249212313906586e-11,
+      "test_rmse": 1.1402548381494348,
+      "train_mae": 9.463655598712002e-13,
+      "test_mae": 0.6222441110514121,
+      "train_r2": 1.0,
+      "test_r2": 0.9946302613731774,
+      "cv_r2_mean": 0.9942352438908575,
+      "cv_r2_std": 0.00021592860339857828,
+      "feature_importance": [
+        {
+          "feature": "Soil_Type",
+          "importance": 0.23286807504028975
+        },
+        {
+          "feature": "Rainfall",
+          "importance": 0.1642753438889864
+        },
+        {
+          "feature": "Light_Hours",
+          "importance": 0.12104400973763679
+        },
+        {
+          "feature": "N_Ratio",
+          "importance": 0.10678300646688056
+        },
+        {
+          "feature": "P_Ratio",
+          "importance": 0.06153104531173095
+        },
+        {
+          "feature": "Potassium",
+          "importance": 0.0567371822007915
+        },
+        {
+          "feature": "Rh",
+          "importance": 0.055033693223236375
+        },
+        {
+          "feature": "Phosphorus",
+          "importance": 0.04868872480491723
+        },
+        {
+          "feature": "Light_Intensity",
+          "importance": 0.033804724726300875
+        },
+        {
+          "feature": "Temperature",
+          "importance": 0.032834220384377284
+        },
+        {
+          "feature": "Nitrogen",
+          "importance": 0.030570743560730366
+        },
+        {
+          "feature": "Fertility",
+          "importance": 0.022156588878921846
+        },
+        {
+          "feature": "K_Ratio",
+          "importance": 0.02214088143445911
+        },
+        {
+          "feature": "pH",
+          "importance": 0.0061269418958291915
+        },
+        {
+          "feature": "Photoperiod",
+          "importance": 0.0020396879541526632
+        },
+        {
+          "feature": "Season",
+          "importance": 0.0017587035967748302
+        },
+        {
+          "feature": "Category_pH",
+          "importance": 0.0016064268939841699
+        }
+      ]
+    },
+    {
+      "task": "regression",
+      "model_type": "RandomForest",
+      "train_rmse": 0.48670272434618356,
+      "test_rmse": 1.2871749531109729,
+      "train_mae": 0.2465608637141909,
+      "test_mae": 0.6432875223722687,
+      "train_r2": 0.9990185919244081,
+      "test_r2": 0.9931573478936851,
+      "cv_r2_mean": 0.9922464089000137,
+      "cv_r2_std": 0.001299887375306842
+    }
+  ]
+}

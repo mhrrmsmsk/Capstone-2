@@ -1,0 +1,114 @@
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:45] - CropDataProcessor initialized
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:55] - Loading data from /Users/muharremsimsek/Desktop/Capstone 2/data/Soil_Nutrients.csv
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:57] - Data shape: (15400, 19)
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:58] - Columns: ['Name', 'Fertility', 'Photoperiod', 'Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh', 'Nitrogen', 'Phosphorus', 'Potassium', 'Yield', 'Category_pH', 'Soil_Type', 'Season', 'N_Ratio', 'P_Ratio', 'K_Ratio']
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:67] - ================================================================================
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:68] - DATA EXPLORATION REPORT
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:69] - ================================================================================
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:71] - 
+Dataset Shape: (15400, 19)
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:72] - 
+Missing Values:
+Name               0
+Fertility          0
+Photoperiod        0
+Temperature        0
+Rainfall           0
+pH                 0
+Light_Hours        0
+Light_Intensity    0
+Rh                 0
+Nitrogen           0
+Phosphorus         0
+Potassium          0
+Yield              0
+Category_pH        0
+Soil_Type          0
+Season             0
+N_Ratio            0
+P_Ratio            0
+K_Ratio            0
+dtype: int64
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:73] - 
+Data Types:
+Name                object
+Fertility           object
+Photoperiod         object
+Temperature        float64
+Rainfall           float64
+pH                 float64
+Light_Hours        float64
+Light_Intensity    float64
+Rh                 float64
+Nitrogen           float64
+Phosphorus         float64
+Potassium          float64
+Yield              float64
+Category_pH         object
+Soil_Type           object
+Season              object
+N_Ratio            float64
+P_Ratio            float64
+K_Ratio            float64
+dtype: object
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:74] - 
+First few rows:
+         Name Fertility       Photoperiod  ...  N_Ratio  P_Ratio  K_Ratio
+0  Strawberry  Moderate       Day Neutral  ...     10.0     10.0     10.0
+1  Strawberry  Moderate       Day Neutral  ...     10.0     10.0     10.0
+2  Strawberry  Moderate  Short Day Period  ...     10.0     10.0     10.0
+3  Strawberry  Moderate  Short Day Period  ...     10.0     10.0     10.0
+4  Strawberry  Moderate       Day Neutral  ...     10.0     10.0     10.0
+
+[5 rows x 19 columns]
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:75] - 
+Basic Statistics:
+        Temperature      Rainfall  ...       P_Ratio       K_Ratio
+count  15400.000000  15400.000000  ...  15400.000000  15400.000000
+mean      20.801671    948.814222  ...     11.704545     12.477273
+std        4.415164    340.884493  ...      5.761853      7.805376
+min        9.355908    409.927161  ...     10.000000      5.000000
+25%       17.915142    707.799164  ...     10.000000     10.000000
+50%       19.929578    846.623453  ...     10.000000     10.000000
+75%       22.936714   1109.157262  ...     10.000000     10.000000
+max       39.913892   2508.052849  ...     37.500000     37.500000
+
+[8 rows x 13 columns]
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:76] - 
+Unique values per column:
+Name                  22
+Fertility              2
+Photoperiod            3
+Temperature        15400
+Rainfall           15400
+pH                 15400
+Light_Hours        15400
+Light_Intensity    15400
+Rh                 15400
+Nitrogen           15400
+Phosphorus         15400
+Potassium          15400
+Yield              15400
+Category_pH            3
+Soil_Type              3
+Season                 4
+N_Ratio                6
+P_Ratio                5
+K_Ratio                5
+dtype: int64
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:117] - Missing values before handling: 0
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:137] - Missing values after handling: 0
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:101] - Categorical features: ['Fertility', 'Photoperiod', 'Category_pH', 'Soil_Type', 'Season']
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:102] - Numerical features: ['Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh', 'Nitrogen', 'Phosphorus', 'Potassium', 'N_Ratio', 'P_Ratio', 'K_Ratio']
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:101] - Categorical features: ['Fertility', 'Photoperiod', 'Category_pH', 'Soil_Type', 'Season']
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:102] - Numerical features: ['Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh', 'Nitrogen', 'Phosphorus', 'Potassium', 'N_Ratio', 'P_Ratio', 'K_Ratio']
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:161] - Feature matrix shape: (15400, 17)
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:162] - Crop target shape: (15400,)
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:163] - Yield target shape: (15400,)
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:164] - Unique crops: 22
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:211] - Encoded and scaled feature matrix shape: (15400, 17)
+2026-04-29 15:13:41 - CropRecommendation.preprocessing - INFO - [preprocessing.py:226] - Preprocessor saved to /Users/muharremsimsek/Desktop/Capstone 2/models
+2026-04-29 15:13:41 - CropRecommendation.train - INFO - [train.py:54] - ModelTrainer initialized. Models directory: /Users/muharremsimsek/Desktop/Capstone 2/models
+2026-04-29 15:13:41 - CropRecommendation.train - INFO - [train.py:109] - Training crop classification model...
+2026-04-29 15:13:47 - CropRecommendation.train - INFO - [train.py:153] - Classifier candidate RandomForest - Test Accuracy: 1.0000, CV: 0.9998 (+/- 0.0005)
+2026-04-29 15:13:49 - CropRecommendation.train - INFO - [train.py:153] - Classifier candidate ExtraTrees - Test Accuracy: 1.0000, CV: 1.0000 (+/- 0.0000)

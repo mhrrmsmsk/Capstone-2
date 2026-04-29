@@ -1,0 +1,155 @@
+2026-04-29 14:31:34 - CropRecommendation.preprocessing - INFO - [preprocessing.py:45] - CropDataProcessor initialized
+2026-04-29 14:31:34 - CropRecommendation.preprocessing - INFO - [preprocessing.py:55] - Loading data from /Users/muharremsimsek/Desktop/Capstone 2/data/Soil_Nutrients.csv
+2026-04-29 14:31:34 - CropRecommendation.preprocessing - INFO - [preprocessing.py:57] - Data shape: (15400, 19)
+2026-04-29 14:31:34 - CropRecommendation.preprocessing - INFO - [preprocessing.py:58] - Columns: ['Name', 'Fertility', 'Photoperiod', 'Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh', 'Nitrogen', 'Phosphorus', 'Potassium', 'Yield', 'Category_pH', 'Soil_Type', 'Season', 'N_Ratio', 'P_Ratio', 'K_Ratio']
+2026-04-29 14:31:34 - CropRecommendation.preprocessing - INFO - [preprocessing.py:67] - ================================================================================
+2026-04-29 14:31:34 - CropRecommendation.preprocessing - INFO - [preprocessing.py:68] - DATA EXPLORATION REPORT
+2026-04-29 14:31:34 - CropRecommendation.preprocessing - INFO - [preprocessing.py:69] - ================================================================================
+2026-04-29 14:31:34 - CropRecommendation.preprocessing - INFO - [preprocessing.py:71] - 
+Dataset Shape: (15400, 19)
+2026-04-29 14:31:34 - CropRecommendation.preprocessing - INFO - [preprocessing.py:72] - 
+Missing Values:
+Name               0
+Fertility          0
+Photoperiod        0
+Temperature        0
+Rainfall           0
+pH                 0
+Light_Hours        0
+Light_Intensity    0
+Rh                 0
+Nitrogen           0
+Phosphorus         0
+Potassium          0
+Yield              0
+Category_pH        0
+Soil_Type          0
+Season             0
+N_Ratio            0
+P_Ratio            0
+K_Ratio            0
+dtype: int64
+2026-04-29 14:31:34 - CropRecommendation.preprocessing - INFO - [preprocessing.py:73] - 
+Data Types:
+Name                   str
+Fertility              str
+Photoperiod            str
+Temperature        float64
+Rainfall           float64
+pH                 float64
+Light_Hours        float64
+Light_Intensity    float64
+Rh                 float64
+Nitrogen           float64
+Phosphorus         float64
+Potassium          float64
+Yield              float64
+Category_pH            str
+Soil_Type              str
+Season                 str
+N_Ratio            float64
+P_Ratio            float64
+K_Ratio            float64
+dtype: object
+2026-04-29 14:31:34 - CropRecommendation.preprocessing - INFO - [preprocessing.py:74] - 
+First few rows:
+         Name Fertility       Photoperiod  Temperature    Rainfall        pH  \
+0  Strawberry  Moderate       Day Neutral    20.887923  747.860765  6.571548   
+1  Strawberry  Moderate       Day Neutral    18.062721  711.104329  6.251806   
+2  Strawberry  Moderate  Short Day Period    16.776782  774.038247  6.346916   
+3  Strawberry  Moderate  Short Day Period    14.281000  665.633506  6.259598   
+4  Strawberry  Moderate       Day Neutral    21.444490  806.531455  6.384368   
+
+   Light_Hours  Light_Intensity         Rh    Nitrogen  Phosphorus  \
+0    13.091483       533.762876  91.197196  170.800381  118.670058   
+1    13.063016       505.789101  91.939623  179.290364  121.020244   
+2    12.945927       512.985617  91.387286  181.440732  116.936806   
+3    13.318922       484.860067  91.254598  176.165282  122.233153   
+4    13.312915       512.747307  92.354829  182.935334  126.088234   
+
+    Potassium      Yield Category_pH Soil_Type  Season  N_Ratio  P_Ratio  \
+0  243.331211  20.369555  low_acidic      Loam  Summer     10.0     10.0   
+1  246.910378  20.402751  low_acidic      Loam  Spring     10.0     10.0   
+2  242.699601  19.158847  low_acidic      Loam  Summer     10.0     10.0   
+3  237.096892  20.265745  low_acidic      Loam  Summer     10.0     10.0   
+4  243.880364  20.397336  low_acidic      Loam  Spring     10.0     10.0   
+
+   K_Ratio  
+0     10.0  
+1     10.0  
+2     10.0  
+3     10.0  
+4     10.0  
+2026-04-29 14:31:34 - CropRecommendation.preprocessing - INFO - [preprocessing.py:75] - 
+Basic Statistics:
+        Temperature      Rainfall            pH   Light_Hours  \
+count  15400.000000  15400.000000  15400.000000  15400.000000   
+mean      20.801671    948.814222      6.473372      9.459365   
+std        4.415164    340.884493      0.449111      2.588466   
+min        9.355908    409.927161      4.888871      5.044913   
+25%       17.915142    707.799164      6.245973      7.017129   
+50%       19.929578    846.623453      6.466286      8.985917   
+75%       22.936714   1109.157262      6.697254     12.019180   
+max       39.913892   2508.052849      8.023210     15.918024   
+
+       Light_Intensity            Rh      Nitrogen    Phosphorus  \
+count     15400.000000  15400.000000  15400.000000  15400.000000   
+mean        398.048832     67.117251    142.769483    107.659893   
+std         190.512173     19.005233     58.524592     72.778284   
+min          69.146572     29.877266     41.725552     13.155191   
+25%         265.438161     53.009874    117.631453     57.627430   
+50%         385.299681     63.248496    140.524941     87.731849   
+75%         508.211962     89.996774    160.186895    145.298926   
+max         985.186247     99.927439    409.639573    360.043619   
+
+          Potassium         Yield       N_Ratio       P_Ratio       K_Ratio  
+count  15400.000000  15400.000000  15400.000000  15400.000000  15400.000000  
+mean     180.481105     22.749990     12.636364     11.704545     12.477273  
+std      103.989340     15.541414     14.028173      5.761853      7.805376  
+min       34.982329      0.770213      5.000000     10.000000      5.000000  
+25%      107.263425     11.978009     10.000000     10.000000     10.000000  
+50%      163.891242     21.232615     10.000000     10.000000     10.000000  
+75%      223.236991     28.812111     10.000000     10.000000     10.000000  
+max      579.953931     66.619242     75.000000     37.500000     37.500000  
+2026-04-29 14:31:34 - CropRecommendation.preprocessing - INFO - [preprocessing.py:76] - 
+Unique values per column:
+Name                  22
+Fertility              2
+Photoperiod            3
+Temperature        15400
+Rainfall           15400
+pH                 15400
+Light_Hours        15400
+Light_Intensity    15400
+Rh                 15400
+Nitrogen           15400
+Phosphorus         15400
+Potassium          15400
+Yield              15400
+Category_pH            3
+Soil_Type              3
+Season                 4
+N_Ratio                6
+P_Ratio                5
+K_Ratio                5
+dtype: int64
+2026-04-29 14:31:37 - CropRecommendation.preprocessing - INFO - [preprocessing.py:117] - Missing values before handling: 0
+2026-04-29 14:31:37 - CropRecommendation.preprocessing - INFO - [preprocessing.py:137] - Missing values after handling: 0
+2026-04-29 14:31:37 - CropRecommendation.preprocessing - INFO - [preprocessing.py:101] - Categorical features: ['Photoperiod', 'Category_pH', 'Soil_Type', 'Season']
+2026-04-29 14:31:37 - CropRecommendation.preprocessing - INFO - [preprocessing.py:102] - Numerical features: ['Fertility', 'Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh', 'Nitrogen', 'Phosphorus', 'Potassium', 'N_Ratio', 'P_Ratio', 'K_Ratio']
+2026-04-29 14:31:37 - CropRecommendation.preprocessing - INFO - [preprocessing.py:101] - Categorical features: ['Photoperiod', 'Category_pH', 'Soil_Type', 'Season']
+2026-04-29 14:31:37 - CropRecommendation.preprocessing - INFO - [preprocessing.py:102] - Numerical features: ['Fertility', 'Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh', 'Nitrogen', 'Phosphorus', 'Potassium', 'N_Ratio', 'P_Ratio', 'K_Ratio']
+2026-04-29 14:31:37 - CropRecommendation.preprocessing - INFO - [preprocessing.py:161] - Feature matrix shape: (15400, 17)
+2026-04-29 14:31:37 - CropRecommendation.preprocessing - INFO - [preprocessing.py:162] - Crop target shape: (15400,)
+2026-04-29 14:31:37 - CropRecommendation.preprocessing - INFO - [preprocessing.py:163] - Yield target shape: (15400,)
+2026-04-29 14:31:37 - CropRecommendation.preprocessing - INFO - [preprocessing.py:164] - Unique crops: 22
+2026-04-29 14:31:47 - CropRecommendation.preprocessing - INFO - [preprocessing.py:117] - Missing values before handling: 0
+2026-04-29 14:31:47 - CropRecommendation.preprocessing - INFO - [preprocessing.py:137] - Missing values after handling: 0
+2026-04-29 14:31:47 - CropRecommendation.preprocessing - INFO - [preprocessing.py:101] - Categorical features: ['Photoperiod', 'Category_pH', 'Soil_Type', 'Season']
+2026-04-29 14:31:47 - CropRecommendation.preprocessing - INFO - [preprocessing.py:102] - Numerical features: ['Fertility', 'Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh', 'Nitrogen', 'Phosphorus', 'Potassium', 'N_Ratio', 'P_Ratio', 'K_Ratio']
+2026-04-29 14:31:47 - CropRecommendation.preprocessing - INFO - [preprocessing.py:101] - Categorical features: ['Photoperiod', 'Category_pH', 'Soil_Type', 'Season']
+2026-04-29 14:31:47 - CropRecommendation.preprocessing - INFO - [preprocessing.py:102] - Numerical features: ['Fertility', 'Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh', 'Nitrogen', 'Phosphorus', 'Potassium', 'N_Ratio', 'P_Ratio', 'K_Ratio']
+2026-04-29 14:31:47 - CropRecommendation.preprocessing - INFO - [preprocessing.py:161] - Feature matrix shape: (15400, 17)
+2026-04-29 14:31:47 - CropRecommendation.preprocessing - INFO - [preprocessing.py:162] - Crop target shape: (15400,)
+2026-04-29 14:31:47 - CropRecommendation.preprocessing - INFO - [preprocessing.py:163] - Yield target shape: (15400,)
+2026-04-29 14:31:47 - CropRecommendation.preprocessing - INFO - [preprocessing.py:164] - Unique crops: 22

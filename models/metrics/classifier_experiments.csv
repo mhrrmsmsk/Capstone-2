@@ -1,0 +1,3 @@
+task,model_type,train_accuracy,test_accuracy,cv_mean,cv_std
+classification,ExtraTrees,1.0,1.0,1.0,0.0
+classification,RandomForest,1.0,1.0,0.9998376359798669,0.00022961739931370956
