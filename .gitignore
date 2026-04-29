@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Trained model files (large binaries - retrain with run_pipeline.py)
+models/*.pkl
+models/metrics/
+models/plots/
+
+# Logs
+logs/
+
+# Data (optional: uncomment if dataset should not be tracked)
+# data/
+# *.csv
+
+# Environment
+.env

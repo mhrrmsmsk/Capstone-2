@@ -9,9 +9,10 @@ Usage:
 
 import sys
 import os
+from pathlib import Path
 
 
-PROJECT_DIR = '/Users/muharremsimsek/Desktop/Capstone 2'
+PROJECT_DIR = str(Path(__file__).parent.resolve())
 VENV_PYTHON = os.path.join(PROJECT_DIR, '.venv', 'bin', 'python')
 
 
@@ -33,7 +34,7 @@ def bootstrap_virtual_environment():
 
 bootstrap_virtual_environment()
 
-sys.path.insert(0, PROJECT_DIR)
+sys.path.insert(0, str(PROJECT_DIR))
 
 import pandas as pd
 import numpy as np
@@ -41,7 +42,6 @@ import warnings
 warnings.filterwarnings('ignore')
 
 from sklearn.model_selection import train_test_split
-from pathlib import Path
 
 # Import custom modules
 from src.preprocessing import CropDataProcessor
@@ -66,7 +66,7 @@ def main():
     print("STEP 1: Loading and Exploring Data")
     print("-" * 80)
     
-    data_path = '/Users/muharremsimsek/Desktop/Capstone 2/data/Soil_Nutrients.csv'
+    data_path = str(Path(PROJECT_DIR) / 'data' / 'Soil_Nutrients.csv')
     processor = CropDataProcessor(data_path)
     df = processor.load_data()
     data_info = processor.explore_data()
@@ -191,7 +191,7 @@ def main():
         'crops': sorted(df['Name'].unique())
     }
     
-    models_dir = Path('/Users/muharremsimsek/Desktop/Capstone 2/models')
+    models_dir = Path(PROJECT_DIR) / 'models'
     with open(models_dir / 'metadata.json', 'w') as f:
         json.dump(metadata, f, indent=4)
     
@@ -322,7 +322,6 @@ KEY CAPABILITIES:
 
 NEXT STEPS:
   1. To run FastAPI server:
-     $ cd /Users/muharremsimsek/Desktop/Capstone\\ 2
      $ uvicorn src.api:app --host 0.0.0.0 --port 8000
   
   2. API will be available at:
@@ -335,9 +334,9 @@ NEXT STEPS:
      result = predictor.predict({...})
 
 ARTIFACTS LOCATION:
-  Models:  /Users/muharremsimsek/Desktop/Capstone 2/models/
-  Logs:    /Users/muharremsimsek/Desktop/Capstone 2/logs/
-  Plots:   /Users/muharremsimsek/Desktop/Capstone 2/models/plots/
+  Models:  models/
+  Logs:    logs/
+  Plots:   models/plots/
 
 ════════════════════════════════════════════════════════════════════════════════
 """
@@ -345,7 +344,7 @@ ARTIFACTS LOCATION:
     print(summary)
     
     logger.info("Pipeline execution complete ✓")
-    print("\n✓ All logs saved to: /Users/muharremsimsek/Desktop/Capstone 2/logs/")
+    print("\n✓ All logs saved to: logs/")
 
 
 if __name__ == "__main__":

@@ -5,28 +5,44 @@
 
 ## ⚡ 30-Second Setup
 
-### 1. Install Dependencies
+### 1. Clone & Install
 ```bash
-cd "/Users/muharremsimsek/Desktop/Capstone 2"
+git clone https://github.com/<your-username>/crop-recommendation-system.git
+cd crop-recommendation-system
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 2. Run the System
-
-**Option A: Interactive Jupyter Notebook (Recommended for Learning)**
+### 2. Train Models
+Model `.pkl` files are not included in the repo. Train them first (~15 seconds):
 ```bash
-jupyter notebook main.ipynb
+python run_pipeline.py
 ```
 
-**Option B: Start FastAPI Server (Recommended for Production)**
+### 3. Run the System
+
+**Option A: FastAPI Server (for production/API use)**
 ```bash
 uvicorn src.api:app --host 0.0.0.0 --port 8000
 # Then visit: http://localhost:8000/docs
 ```
 
-**Option C: Run Complete Pipeline Script**
+**Option B: Streamlit Web Interface (for interactive use)**
 ```bash
-python3 run_pipeline.py
+streamlit run streamlit_app.py
+# Opens at: http://localhost:8501
+```
+
+**Option C: Jupyter Notebook (for learning)**
+```bash
+jupyter notebook main.ipynb
+```
+
+**Option D: Docker**
+```bash
+docker build -t crop-recommendation .
+docker run -p 8000:8000 crop-recommendation
 ```
 
 ---
@@ -37,14 +53,14 @@ python3 run_pipeline.py
 ```
 Input: Environmental & soil sensor readings
 Output: Top 3 recommended crops with confidence percentages
-Accuracy: 100%
+Accuracy: 100% test accuracy (CV: 99.98%)
 ```
 
 ### Yield Prediction (Regression)
 ```
 Input: Crop and growing conditions
 Output: Predicted yield value
-Accuracy: R² = 0.9931 (99.31%)
+Accuracy: R² = 0.9946
 ```
 
 ### Smart Missing Value Handling
@@ -180,10 +196,12 @@ System provides: Top-3 crops for each location in seconds via batch API
 
 | File | Purpose |
 |------|---------|
+| `run_pipeline.py` | Train models and run demo |
 | `main.ipynb` | Complete interactive tutorial |
+| `streamlit_app.py` | Web interface |
 | `README.md` | Full documentation |
-| `SYSTEM_COMPLETION_REPORT.md` | Detailed completion report |
-| `run_pipeline.py` | Standalone pipeline script |
+| `QUICK_START.md` | This guide |
+| `CONTRIBUTING.md` | How to contribute |
 | `src/preprocessing.py` | Data processing |
 | `src/train.py` | Model training |
 | `src/predict.py` | Prediction engine |
@@ -210,10 +228,8 @@ uvicorn src.api:app --port 8001
 
 ### Models not found
 ```bash
-# Run the notebook or pipeline script to train models
-jupyter notebook main.ipynb
-# or
-python3 run_pipeline.py
+# Model .pkl files are gitignored. Train them first:
+python run_pipeline.py
 ```
 
 ---
@@ -248,7 +264,7 @@ Client/Frontend
 | Component | Performance |
 |-----------|-------------|
 | Crop Classification | 100% accuracy |
-| Yield Prediction | R² = 0.9931 |
+| Yield Prediction | R² = 0.9946 |
 | API Response | < 100ms |
 | Batch Processing (100 samples) | < 2 seconds |
 | Model Training (15,400 samples) | ~15 seconds |
@@ -280,7 +296,7 @@ Client/Frontend
 ```
 ✓ Data Preprocessing:      COMPLETE
 ✓ Classification Model:    COMPLETE (100% accuracy)
-✓ Regression Model:        COMPLETE (R² = 0.9931)
+✓ Regression Model:        COMPLETE (R² = 0.9946)
 ✓ KNN Similarity Search:   COMPLETE
 ✓ Recommendation Engine:   COMPLETE
 ✓ REST API:                COMPLETE
@@ -320,6 +336,6 @@ STATUS: 🟢 PRODUCTION READY
 
 ---
 
-**Last Updated**: April 29, 2024  
+**Last Updated**: April 2024  
 **Status**: ✅ Production Ready  
 **Support**: See README.md for detailed documentation

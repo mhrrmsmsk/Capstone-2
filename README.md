@@ -12,9 +12,9 @@ This system intelligently handles **both complete and incomplete sensor data** t
 
 ## 📊 Dataset
 
-**File**: `Soil Nutrients.csv`
+**File**: `data/Soil_Nutrients.csv`
 
-**18 Features**:
+**17 Input Features**:
 - **Environmental**: Temperature, Rainfall, Photoperiod, Light_Hours, Light_Intensity, Rh
 - **Soil**: pH, Fertility, Soil_Type, Category_pH
 - **Nutrients**: Nitrogen, Phosphorus, Potassium, N_Ratio, P_Ratio, K_Ratio
@@ -27,12 +27,26 @@ This system intelligently handles **both complete and incomplete sensor data** t
 ## 🏗️ Project Structure
 
 ```
-Capstone 2/
+crop-recommendation-system/
 ├── main.ipynb                    # Main Jupyter notebook (complete workflow)
+├── run_pipeline.py               # End-to-end training pipeline script
+├── streamlit_app.py              # Streamlit web interface
 ├── requirements.txt              # Python dependencies
+├── pyproject.toml                # Modern Python packaging config
+├── Dockerfile                    # Container build configuration
+├── .dockerignore                 # Docker ignore rules
+├── .gitignore                    # Git ignore rules
+├── .gitattributes                # Git LFS config for model files
+├── LICENSE                       # MIT License
 ├── README.md                     # This file
+├── CONTRIBUTING.md               # Contribution guidelines
+├── CODE_OF_CONDUCT.md            # Community code of conduct
+├── QUICK_START.md                # 30-second setup guide
+├── DELIVERY_SUMMARY.md           # Project delivery summary
+├── SYSTEM_COMPLETION_REPORT.md   # Detailed technical report
+├── STREAMLIT_SETUP.md            # Streamlit setup guide
 ├── data/
-│   └── Soil_Nutrients.csv       # Original dataset
+│   └── Soil_Nutrients.csv       # Dataset (15,400 samples)
 ├── src/
 │   ├── __init__.py              # Package initialization
 │   ├── logger.py                # Logging configuration
@@ -41,7 +55,7 @@ Capstone 2/
 │   ├── predict.py               # Prediction engine
 │   ├── recommender.py           # Intelligent recommendation system
 │   └── api.py                   # FastAPI endpoints
-├── models/                      # Trained models directory
+├── models/                      # Trained models (Git LFS)
 │   ├── crop_classifier.pkl      # Classification model
 │   ├── yield_regressor.pkl      # Regression model
 │   ├── scaler.pkl               # Feature scaler
@@ -53,7 +67,10 @@ Capstone 2/
 │   └── plots/
 │       ├── feature_importance_crop.png
 │       └── feature_importance_yield.png
-└── logs/                        # Application logs
+├── tests/                       # Test suite
+│   ├── __init__.py
+│   └── test_smoke.py            # Smoke tests
+└── logs/                        # Application logs (gitignored)
 ```
 
 ## 🚀 Quick Start
@@ -61,39 +78,56 @@ Capstone 2/
 ### 1. Installation
 
 ```bash
-# Clone/navigate to project
-cd /Users/muharremsimsek/Desktop/Capstone\ 2
+# Clone the repository
+git clone https://github.com/<your-username>/crop-recommendation-system.git
+cd crop-recommendation-system
+
+# Create a virtual environment (recommended)
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
 ```
 
-### 2. Run the Complete Pipeline
+### 2. Train Models
+
+Trained model files (`.pkl`) are **not included** in the repository due to their size. You must train them first:
 
 ```bash
-# Run Jupyter notebook
-jupyter notebook main.ipynb
+# Option A: Run the pipeline script
+python run_pipeline.py
 
-# Or use VS Code
-code main.ipynb
+# Option B: Run the Jupyter notebook
+jupyter notebook main.ipynb
 ```
 
-The notebook includes:
-- Data exploration and preprocessing
-- Model training and evaluation
-- Missing value estimation demonstration
-- Complete prediction demo
-- FastAPI setup instructions
+This trains both models and saves them to `models/`. The process takes ~15 seconds.
 
-### 3. Start the API Server
+### 3. Run the System
 
+**Option A: FastAPI Server (for production/API use)**
 ```bash
-# Terminal command
-cd /Users/muharremsimsek/Desktop/Capstone\ 2
 uvicorn src.api:app --host 0.0.0.0 --port 8000
+# API: http://localhost:8000
+# Interactive docs: http://localhost:8000/docs
+```
 
-# Then access at: http://localhost:8000
-# API documentation: http://localhost:8000/docs
+**Option B: Streamlit Web Interface (for interactive use)**
+```bash
+streamlit run streamlit_app.py
+# Opens at: http://localhost:8501
+```
+
+**Option C: Jupyter Notebook (for learning/exploration)**
+```bash
+jupyter notebook main.ipynb
+```
+
+**Option D: Docker**
+```bash
+docker build -t crop-recommendation .
+docker run -p 8000:8000 crop-recommendation
 ```
 
 ## 🤖 Key Features
@@ -106,12 +140,12 @@ uvicorn src.api:app --host 0.0.0.0 --port 8000
 
 ### 2. Crop Classification Model
 - **Model**: RandomForestClassifier (200 trees, max_depth=20)
-- **Performance**: ~92% accuracy
+- **Performance**: 100% test accuracy, 99.98% CV
 - **Output**: Top-3 crops with probabilities
 
 ### 3. Yield Prediction Model
-- **Model**: RandomForestRegressor (200 trees)
-- **Performance**: R² ~ 0.95, RMSE ~ 0.8
+- **Model**: RandomForestRegressor (200 trees, max_depth=20)
+- **Performance**: R² = 0.9946, RMSE = 1.14
 - **Metrics**: RMSE, MAE, R²
 
 ### 4. Intelligent Missing Value Estimation ⭐
@@ -129,7 +163,7 @@ predictor.predict({
     'Fertility': 'High',
     'Temperature': 20,
     'pH': 6.5,
-    # ... all 18 features
+    # ... all 17 features
 })
 
 # Partial Input (3+ features)
@@ -234,17 +268,17 @@ Get information about loaded models
 
 ### Classification (Crop Recommendation)
 ```
-Train Accuracy:        0.9743
-Test Accuracy:         0.9201
-Cross-Validation:      0.9192 (±0.0156)
+Train Accuracy:        1.0000
+Test Accuracy:         1.0000
+Cross-Validation:      0.9998 (±0.0005)
 ```
 
 ### Regression (Yield Prediction)
 ```
-Test RMSE:             0.8234
-Test MAE:              0.6145
-Test R²:               0.9512
-Cross-Validation R²:   0.9487 (±0.0089)
+Test RMSE:             1.1403
+Test MAE:              0.5520
+Test R²:               0.9946
+Cross-Validation R²:   0.9931 (±0.0089)
 ```
 
 ## 🔍 Example Usage
@@ -253,21 +287,52 @@ Cross-Validation R²:   0.9487 (±0.0089)
 
 ```python
 from src.predict import CropPredictor
-import joblib
+from src.preprocessing import CropDataProcessor
+from src.train import ModelTrainer
+from src.recommender import IntelligentRecommender
 
-# Load models
-clf = joblib.load('models/crop_classifier.pkl')
-reg = joblib.load('models/yield_regressor.pkl')
+# Step 1: Load and preprocess data
+processor = CropDataProcessor('data/Soil_Nutrients.csv')
+df = processor.load_data()
+processor.handle_missing_values(strategy='mean')
+processor.identify_features()
+X, y_crop, y_yield = processor.prepare_features_for_training()
+X_processed = processor.encode_and_scale(X, fit=True)
+processor.save_preprocessor()
+
+# Step 2: Train models (or load pre-trained with ModelTrainer.load_models())
+trainer = ModelTrainer()
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_crop_train, y_crop_test, y_yield_train, y_yield_test = \
+    train_test_split(X_processed, y_crop, y_yield, test_size=0.2, random_state=42, stratify=y_crop)
+trainer.train_crop_classifier(X_train, y_crop_train, X_test, y_crop_test)
+trainer.train_yield_regressor(X_train, y_yield_train, X_test, y_yield_test)
+trainer.save_models()
+
+# Step 3: Create predictor and make predictions
+recommender = IntelligentRecommender(
+    df_train=df, X_train_processed=X_processed, y_crop=y_crop, y_yield=y_yield,
+    feature_columns=processor.feature_columns,
+    numerical_features=processor.numerical_features,
+    categorical_features=processor.categorical_features,
+    preprocessor=processor
+)
+recommender.save_recommender()
+
+predictor = CropPredictor(
+    crop_classifier=trainer.crop_classifier,
+    yield_regressor=trainer.yield_regressor,
+    preprocessor=processor,
+    recommender=recommender,
+    feature_columns=processor.feature_columns,
+    numerical_features=processor.numerical_features,
+    categorical_features=processor.categorical_features
+)
 
 # Make prediction with only 3 features
-input_data = {
-    'Temperature': 22,
-    'Rainfall': 800,
-    'pH': 6.3
-}
-
-result = predictor.predict(input_data)
-# System automatically estimates missing 15 features!
+result = predictor.predict({'Temperature': 22, 'Rainfall': 800, 'pH': 6.3})
+print(result['recommended_crops'])  # Top 3 crops with probabilities
+# System automatically estimates missing features!
 ```
 
 ### Example 2: Crop Optimization
@@ -300,24 +365,24 @@ curl -X POST http://localhost:8000/predict \
 ## 📊 Feature Importance
 
 ### Top Features for Crop Classification
-1. Light_Intensity
-2. Nitrogen
-3. Photoperiod
-4. Potassium
-5. Temperature
+1. Potassium
+2. Rh
+3. Phosphorus
+4. Nitrogen
+5. Light_Intensity
 
 ### Top Features for Yield Prediction
-1. Light_Intensity
-2. Potassium
-3. Nitrogen
-4. Rainfall
-5. Temperature
+1. Light_Hours
+2. Soil_Type
+3. Potassium
+4. Light_Intensity
+5. Rainfall
 
 ## 🧠 How It Works
 
 ### 1. Complete Input Flow
 ```
-Input (18 features) → Encode/Scale → Classifier → Top 3 Crops
+Input (17 features) → Encode/Scale → Classifier → Top 3 Crops
                     → Regressor → Yield Estimate
                     → Optimizer → Condition Ranges
 ```
@@ -410,14 +475,15 @@ CropPredictor()
 
 ### Models not found
 ```bash
-# Run the notebook completely to train and save models
+# Model .pkl files are gitignored. Train them first:
+python run_pipeline.py
+# Or run the notebook:
 jupyter notebook main.ipynb
 ```
 
 ### Import errors
 ```bash
-# Make sure you're in the right directory
-cd /Users/muharremsimsek/Desktop/Capstone\ 2
+# Make sure you're in the project root directory
 export PYTHONPATH="${PYTHONPATH}:$(pwd)"
 ```
 
@@ -455,13 +521,15 @@ uvicorn src.api:app --reload
 
 ## 📝 License
 
-Proprietary - Capstone Project 2024
+MIT License - see [LICENSE](LICENSE) for details
 
 ## 👨‍💻 Author
 
 Built as a comprehensive end-to-end ML system following production best practices.
 
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
 ---
 
-**Last Updated**: April 29, 2024
+**Last Updated**: April 2024
 **Status**: ✅ Production Ready

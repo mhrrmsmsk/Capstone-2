@@ -25,7 +25,7 @@ A complete, production-ready machine learning system has been built that:
 
 ### Directory Structure
 ```
-Capstone 2/
+crop-recommendation-system/
 ├── main.ipynb                      # Complete Jupyter notebook (23 cells)
 ├── run_pipeline.py                 # Standalone pipeline execution script
 ├── requirements.txt                # Python dependencies
@@ -193,6 +193,8 @@ Train Accuracy:          1.0000 (100%)
 Test Accuracy:           1.0000 (100%)
 Cross-Validation Score:  0.9998 (±0.0005)
 Crops Predicted:         22 unique crops
+
+> **Note**: Model `.pkl` files are gitignored. Run `python run_pipeline.py` to train them.
 ```
 
 **Top Important Features**:
@@ -205,10 +207,10 @@ Crops Predicted:         22 unique crops
 ### Yield Prediction Model
 ```
 Model: RandomForestRegressor (200 trees, max_depth=20)
-Test RMSE:               1.2966
-Test MAE:                0.6427
-Test R²:                 0.9931 (99.31% variance explained)
-Cross-Validation R²:     0.9923 (±0.0018)
+Test RMSE:               1.1403
+Test MAE:                0.5520
+Test R²:                 0.9946
+Cross-Validation R²:     0.9931 (±0.0089)
 ```
 
 **Top Important Features**:
@@ -276,7 +278,6 @@ Processing Time: < 500ms
 pip install -r requirements.txt
 
 # Start API server
-cd /Users/muharremsimsek/Desktop/Capstone\ 2
 uvicorn src.api:app --host 0.0.0.0 --port 8000
 
 # Access API:
@@ -368,7 +369,7 @@ for i, result in enumerate(results, 1):
 
 ### ✅ Yield Prediction
 - [x] RandomForest regressor
-- [x] High-accuracy predictions (R² = 0.9931)
+- [x] High-accuracy predictions (R² = 0.9946)
 - [x] RMSE and MAE metrics
 - [x] Feature importance ranking
 
@@ -404,9 +405,9 @@ for i, result in enumerate(results, 1):
 
 ## 📊 Dataset Information
 
-**Source**: Soil Nutrients.csv  
+**Source**: `data/Soil_Nutrients.csv`  
 **Samples**: 15,400  
-**Features**: 17 (13 numerical + 5 categorical - 1 target, 1 yield)  
+**Features**: 17 input (12 numerical + 5 categorical) + 2 targets (Name, Yield)  
 **Crops**: 22 unique varieties  
 **Balanced**: Yes (700 samples per crop)  
 **Yield Range**: 0.77 - 66.62 units  
@@ -423,13 +424,13 @@ Strawberry, Tomatoes, Watermelon
 
 ### Saved Files
 ```
-models/
-├── crop_classifier.pkl          [5.2 MB] - Classification model
-├── yield_regressor.pkl          [5.1 MB] - Regression model
-├── scaler.pkl                   [1.2 KB] - Feature scaler
-├── label_encoder.pkl            [8.3 KB] - Categorical encoders
-├── knn_model.pkl                [127 MB] - KNN model for similarity search
-├── metadata.json                [2.5 KB] - Model metadata & config
+models/                          (gitignored - train with run_pipeline.py)
+├── crop_classifier.pkl          ~25 MB - Classification model
+├── yield_regressor.pkl          ~530 MB - Regression model
+├── scaler.pkl                   ~1 KB - Feature scaler
+├── label_encoder.pkl            ~2 KB - Categorical encoders
+├── knn_model.pkl                ~2 MB - KNN model for similarity search
+├── metadata.json                ~2 KB - Model metadata & config
 ├── feature_importance_crop.csv
 ├── feature_importance_yield.csv
 └── plots/
@@ -487,7 +488,7 @@ All operations logged to: `logs/system_*.log`
 - [ ] Hyperparameter tuning (GridSearchCV)
 - [ ] Model ensemble (voting/stacking)
 - [ ] Cross-validation strategies
-- [ ] Docker containerization
+- [x] ~~Docker containerization~~ (Dockerfile already included)
 
 ### Medium-term (Phase 3)
 - [ ] Web UI dashboard
@@ -512,7 +513,7 @@ All operations logged to: `logs/system_*.log`
 - [x] Preprocessing pipeline built
 - [x] Feature engineering completed
 - [x] Classification model trained (100% accuracy)
-- [x] Regression model trained (R² = 0.9931)
+- [x] Regression model trained (R² = 0.9946)
 - [x] KNN similarity search implemented
 - [x] Intelligent recommender built
 - [x] Unified prediction engine created
@@ -544,7 +545,7 @@ All operations logged to: `logs/system_*.log`
 - `src/api.py` - REST API
 
 ### Logs
-- Location: `/Users/muharremsimsek/Desktop/Capstone 2/logs/`
+- Location: `logs/`
 - Format: `system_YYYYMMDD_HHMMSS.log`
 - Includes all model training and prediction logs
 
@@ -579,15 +580,15 @@ All operations logged to: `logs/system_*.log`
 ╠═══════════════════════════════════════════════════════════════════╣
 ║                                                                   ║
 ║ Classification Model (Crop Recommendation)                       ║
-║   • Test Accuracy:           100.00% ✓✓✓                        ║
+║   • Test Accuracy:           100.00%                            ║
 ║   • CV Score:                99.98% (±0.05%)                    ║
 ║   • Unique Classes:          22 crops                            ║
 ║                                                                   ║
 ║ Regression Model (Yield Prediction)                              ║
-║   • R² Score:                0.9931 (99.31%) ✓✓✓                ║
-║   • RMSE:                    1.30 units                          ║
-║   • MAE:                     0.64 units                          ║
-║   • CV R² Score:             0.9923 (±0.18%)                    ║
+║   • R² Score:                0.9946                              ║
+║   • RMSE:                    1.14 units                          ║
+║   • MAE:                     0.55 units                          ║
+║   • CV R² Score:             0.9931 (±0.89%)                    ║
 ║                                                                   ║
 ║ Missing Value Estimation (KNN-based)                             ║
 ║   • Similar Samples:         10 nearest neighbors                ║
@@ -607,7 +608,7 @@ A **complete, production-ready end-to-end machine learning system** has been suc
 
 The system:
 - ✅ Achieves 100% classification accuracy
-- ✅ Predicts yield with 99.31% accuracy
+- ✅ Predicts yield with R² = 0.9946
 - ✅ Handles both complete and incomplete sensor data
 - ✅ Uses intelligent KNN-based missing value estimation
 - ✅ Provides crop recommendations with probabilities
@@ -621,7 +622,7 @@ The system:
 
 ---
 
-**Project Completion Date**: April 29, 2024  
+**Project Completion Date**: April 2024  
 **Total Development Time**: Full end-to-end implementation  
 **Lines of Code**: 2,500+ lines (production-ready Python)  
 **Documentation**: Complete with README, API docs, and inline comments

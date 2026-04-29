@@ -10,7 +10,7 @@ from .recommender import IntelligentRecommender
 from .logger import get_logger
 
 __version__ = "1.0.0"
-__author__ = "ML Engineering Team"
+__author__ = "Crop Recommendation Contributors"
 
 __all__ = [
     "CropDataProcessor",

@@ -4,15 +4,19 @@
 
 ### 1️⃣ Install Dependencies
 ```bash
-cd "/Users/muharremsimsek/Desktop/Capstone 2"
-python3.11 -m venv .venv
-source .venv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 2️⃣ Run the App
+### 2️⃣ Train Models
+Model `.pkl` files are not included in the repo. Train them first (~15 seconds):
 ```bash
-source .venv/bin/activate
+python run_pipeline.py
+```
+
+### 3️⃣ Run the App
+```bash
 streamlit run streamlit_app.py
 ```
 
@@ -145,9 +149,9 @@ streamlit run streamlit_app.py --server.port 8502
 ```
 
 ### Models Not Found
-- Ensure you're in the correct directory
-- Run the notebook or pipeline script first to train models
-- Check that `models/` directory exists with model files
+- Model `.pkl` files are gitignored — you must train them first
+- Run `python run_pipeline.py` to train and save models
+- Check that `models/` directory exists with `.pkl` files
 
 ### Import Errors
 ```bash

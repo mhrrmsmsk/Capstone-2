@@ -1,12 +1,11 @@
-# 🎯 PROJECT DELIVERY SUMMARY
+# Project Overview
 ## Sensor-Based Crop Recommendation & Yield Optimization System
 
-**Delivery Date**: April 29, 2024  
 **Status**: ✅ **COMPLETE AND READY FOR DEPLOYMENT**
 
 ---
 
-## 📦 WHAT HAS BEEN DELIVERED
+## What This System Provides
 
 ### ✅ Complete ML System
 A **production-ready, end-to-end machine learning system** consisting of:
@@ -25,8 +24,8 @@ A **production-ready, end-to-end machine learning system** consisting of:
 
 3. **Yield Prediction Model**
    - RandomForest Regressor
-   - **R² = 0.9931** (99.31% accuracy) ✓
-   - RMSE = 1.30, MAE = 0.64
+   - **R² = 0.9946** ✓
+   - RMSE = 1.14, MAE = 0.55
    - Cross-validated performance
 
 4. **Intelligent Recommender**
@@ -58,7 +57,7 @@ A **production-ready, end-to-end machine learning system** consisting of:
 ## 📂 PROJECT STRUCTURE
 
 ```
-/Users/muharremsimsek/Desktop/Capstone 2/
+crop-recommendation-system/
 │
 ├── 📄 Documentation
 │   ├── README.md                      ← Full documentation
@@ -85,18 +84,16 @@ A **production-ready, end-to-end machine learning system** consisting of:
 ├── 📊 Data
 │   └── data/Soil_Nutrients.csv        ← Dataset (15,400 samples)
 │
-├── 🤖 Trained Models
+├── 🤖 Trained Models (gitignored - train with run_pipeline.py)
 │   └── models/
-│       ├── crop_classifier.pkl        ← Classification model
-│       ├── yield_regressor.pkl        ← Regression model
-│       ├── scaler.pkl                 ← Feature scaler
-│       ├── label_encoder.pkl          ← Categorical encoders
-│       ├── knn_model.pkl              ← KNN for similarity search
-│       ├── metadata.json              ← Model metadata
-│       └── plots/                     ← Feature importance visualizations
+│       ├── crop_classifier.pkl          ~25 MB
+│       ├── yield_regressor.pkl          ~530 MB
+│       ├── scaler.pkl, label_encoder.pkl, knn_model.pkl
+│       ├── metadata.json
+│       └── plots/
 │
-└── 📝 Logs
-    └── logs/system_*.log              ← Application logs
+└── 📝 Logs (gitignored)
+    └── logs/system_*.log
 ```
 
 ---
@@ -106,17 +103,17 @@ A **production-ready, end-to-end machine learning system** consisting of:
 ### Classification Performance
 ```
 Train Accuracy:   100.0%
-Test Accuracy:    100.0%  ✓✓✓
+Test Accuracy:    100.0%
 CV Score:         99.98% (±0.05%)
 Crops Predicted:  22 unique varieties
 ```
 
 ### Regression Performance
 ```
-Test R²:          0.9931 (99.31%)  ✓✓✓
-Test RMSE:        1.30 units
-Test MAE:         0.64 units
-CV R²:            0.9923 (±0.18%)
+Test R²:          0.9946
+Test RMSE:        1.14 units
+Test MAE:         0.55 units
+CV R²:            0.9931 (±0.89%)
 ```
 
 ### Missing Value Estimation
@@ -129,26 +126,36 @@ Accuracy:         Data-driven from actual samples
 
 ---
 
-## 🚀 HOW TO USE
+## How to Use
+
+> **Important**: Model `.pkl` files are not included in the repository. Run `python run_pipeline.py` first to train them (~15 seconds).
 
 ### Option 1: FastAPI Server (Best for Production)
 ```bash
-cd "/Users/muharremsimsek/Desktop/Capstone 2"
 pip install -r requirements.txt
+python run_pipeline.py  # Train models first
 uvicorn src.api:app --host 0.0.0.0 --port 8000
 # Visit: http://localhost:8000/docs
 ```
 
-### Option 2: Jupyter Notebook (Best for Learning)
+### Option 2: Streamlit Web Interface (Best for Interactive Use)
+```bash
+pip install -r requirements.txt
+python run_pipeline.py  # Train models first
+streamlit run streamlit_app.py
+# Opens at: http://localhost:8501
+```
+
+### Option 3: Jupyter Notebook (Best for Learning)
 ```bash
 jupyter notebook main.ipynb
 # Run cells to see full pipeline and demonstrations
 ```
 
-### Option 3: Python Script (Best for Batch Processing)
+### Option 4: Docker
 ```bash
-python3 run_pipeline.py
-# Trains all models and demonstrates predictions
+docker build -t crop-recommendation .
+docker run -p 8000:8000 crop-recommendation
 ```
 
 ---
@@ -394,7 +401,7 @@ python3 run_pipeline.py
 ```
 
 ### Logs
-Location: `/Users/muharremsimsek/Desktop/Capstone 2/logs/`
+Location: `logs/`
 
 ---
 
@@ -403,7 +410,7 @@ Location: `/Users/muharremsimsek/Desktop/Capstone 2/logs/`
 | Component | Technology | Performance |
 |-----------|-----------|-------------|
 | Classification | RandomForest | 100% accuracy |
-| Regression | RandomForest | R² = 0.9931 |
+| Regression | RandomForest | R² = 0.9946 |
 | Similarity Search | KNN | <5ms |
 | API Server | FastAPI | <100ms |
 | Data Processing | pandas/numpy | <10ms |
@@ -414,7 +421,7 @@ Location: `/Users/muharremsimsek/Desktop/Capstone 2/logs/`
 ## 🏆 PROJECT HIGHLIGHTS
 
 ✨ **100% Classification Accuracy**  
-✨ **99.31% Regression Accuracy (R² Score)**  
+✨ **R² = 0.9946 Regression Accuracy**  
 ✨ **Intelligent Missing Value Estimation** (KNN-based, NOT simple mean)  
 ✨ **Production-Ready API** (FastAPI with Swagger UI)  
 ✨ **2,500+ Lines of Clean Code**  
@@ -442,6 +449,5 @@ Location: `/Users/muharremsimsek/Desktop/Capstone 2/logs/`
 
 ---
 
-**Delivered**: April 29, 2024  
-**Location**: `/Users/muharremsimsek/Desktop/Capstone 2/`  
+**Delivered**: April 2024  
 **Status**: 🟢 PRODUCTION READY
