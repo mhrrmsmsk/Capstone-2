@@ -1,0 +1,19 @@
+2026-04-30 11:45:00 - CropRecommendation.preprocessing - INFO - [preprocessing.py:45] - CropDataProcessor initialized
+2026-04-30 11:45:00 - CropRecommendation.preprocessing - INFO - [preprocessing.py:238] - Preprocessor loaded from /Users/alpsalcioglu/Desktop/capstoneProject/Capstone-2/models
+2026-04-30 11:45:00 - CropRecommendation.preprocessing - INFO - [preprocessing.py:55] - Loading data from /Users/alpsalcioglu/Desktop/capstoneProject/Capstone-2/data/Soil_Nutrients.csv
+2026-04-30 11:45:00 - CropRecommendation.preprocessing - INFO - [preprocessing.py:57] - Data shape: (15400, 19)
+2026-04-30 11:45:00 - CropRecommendation.preprocessing - INFO - [preprocessing.py:58] - Columns: ['Name', 'Fertility', 'Photoperiod', 'Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh', 'Nitrogen', 'Phosphorus', 'Potassium', 'Yield', 'Category_pH', 'Soil_Type', 'Season', 'N_Ratio', 'P_Ratio', 'K_Ratio']
+2026-04-30 11:45:00 - CropRecommendation.preprocessing - INFO - [preprocessing.py:117] - Missing values before handling: 0
+2026-04-30 11:45:00 - CropRecommendation.preprocessing - INFO - [preprocessing.py:137] - Missing values after handling: 0
+2026-04-30 11:45:00 - CropRecommendation.preprocessing - INFO - [preprocessing.py:101] - Categorical features: ['Fertility', 'Photoperiod', 'Category_pH', 'Soil_Type', 'Season']
+2026-04-30 11:45:00 - CropRecommendation.preprocessing - INFO - [preprocessing.py:102] - Numerical features: ['Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh', 'Nitrogen', 'Phosphorus', 'Potassium', 'N_Ratio', 'P_Ratio', 'K_Ratio']
+2026-04-30 11:45:00 - CropRecommendation.preprocessing - INFO - [preprocessing.py:101] - Categorical features: ['Fertility', 'Photoperiod', 'Category_pH', 'Soil_Type', 'Season']
+2026-04-30 11:45:00 - CropRecommendation.preprocessing - INFO - [preprocessing.py:102] - Numerical features: ['Temperature', 'Rainfall', 'pH', 'Light_Hours', 'Light_Intensity', 'Rh', 'Nitrogen', 'Phosphorus', 'Potassium', 'N_Ratio', 'P_Ratio', 'K_Ratio']
+2026-04-30 11:45:00 - CropRecommendation.preprocessing - INFO - [preprocessing.py:161] - Feature matrix shape: (15400, 17)
+2026-04-30 11:45:00 - CropRecommendation.preprocessing - INFO - [preprocessing.py:162] - Crop target shape: (15400,)
+2026-04-30 11:45:00 - CropRecommendation.preprocessing - INFO - [preprocessing.py:163] - Yield target shape: (15400,)
+2026-04-30 11:45:00 - CropRecommendation.preprocessing - INFO - [preprocessing.py:164] - Unique crops: 22
+2026-04-30 11:45:00 - CropRecommendation.preprocessing - INFO - [preprocessing.py:211] - Encoded and scaled feature matrix shape: (15400, 17)
+2026-04-30 11:45:00 - CropRecommendation.recommender - INFO - [recommender.py:53] - IntelligentRecommender initialized with KNN model
+2026-04-30 11:45:00 - CropRecommendation.predict - INFO - [predict.py:44] - CropPredictor initialized
+2026-04-30 11:45:00 - CropRecommendation.api - INFO - [api.py:90] - Models loaded successfully
