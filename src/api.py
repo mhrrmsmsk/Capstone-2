@@ -254,6 +254,211 @@ async def feature_importance():
     return result
 
 
+class RecommendationInput(BaseModel):
+    crop_name: str
+    optimized_conditions: Dict[str, Any]
+    current_values: Optional[Dict[str, Any]] = None
+
+
+@app.post("/recommendations")
+async def get_recommendations(data: RecommendationInput):
+    """Generate actionable agricultural advice from optimized_conditions.
+
+    For each feature that needs adjustment, returns a category, icon key,
+    and bilingual (EN/TR) advice text.
+    """
+
+    ADVICE: Dict[str, Any] = {
+        "Temperature": {
+            "category": "Climate",
+            "icon": "thermometer",
+            "increase": {
+                "en": "Move crops to a warmer location or use greenhouse heating. Consider plastic mulch to retain soil warmth.",
+                "tr": "Bitkileri daha sıcak bir alana taşıyın veya sera ısıtması kullanın. Toprak sıcaklığını korumak için plastik malç düşünün."
+            },
+            "decrease": {
+                "en": "Use shade nets or increase irrigation to cool the canopy. Consider growing in a cooler season.",
+                "tr": "Gölge ağları kullanın veya yaprak örtüsünü soğutmak için sulamayı artırın. Daha serin bir mevsimde yetiştirmeyi düşünün."
+            },
+        },
+        "Rainfall": {
+            "category": "Irrigation",
+            "icon": "droplets",
+            "increase": {
+                "en": "Increase irrigation frequency or switch to drip irrigation. Apply organic mulch to retain soil moisture.",
+                "tr": "Sulama sıklığını artırın veya damla sulamaya geçin. Toprak nemini korumak için organik malç uygulayın."
+            },
+            "decrease": {
+                "en": "Improve field drainage. Avoid overhead irrigation; switch to sub-surface or drip methods.",
+                "tr": "Tarla drenajını iyileştirin. Yağmurlama sulamadan kaçının; toprak altı veya damla sulama yöntemlerine geçin."
+            },
+        },
+        "pH": {
+            "category": "Soil pH",
+            "icon": "flask",
+            "increase": {
+                "en": "Apply agricultural lime (calcium carbonate) to raise soil pH. Dolomitic lime also adds magnesium.",
+                "tr": "Toprak pH'ını yükseltmek için tarımsal kireç (kalsiyum karbonat) uygulayın. Dolomitik kireç aynı zamanda magnezyum ekler."
+            },
+            "decrease": {
+                "en": "Apply elemental sulfur or acidifying fertilizers (ammonium sulfate) to lower soil pH.",
+                "tr": "Toprak pH'ını düşürmek için elementel kükürt veya asitleştirici gübreler (amonyum sülfat) uygulayın."
+            },
+        },
+        "Light_Hours": {
+            "category": "Light",
+            "icon": "sun",
+            "increase": {
+                "en": "Use supplemental grow lights (LED/HPS) or relocate to a more exposed field position.",
+                "tr": "Tamamlayıcı büyüme lambaları (LED/HPS) kullanın veya daha açık bir tarla konumuna taşıyın."
+            },
+            "decrease": {
+                "en": "Install shade cloth (30–50%) over the crop canopy to reduce daily light hours.",
+                "tr": "Günlük ışık saatlerini azaltmak için bitki örtüsünün üzerine gölge bezi (%30–50) takın."
+            },
+        },
+        "Light_Intensity": {
+            "category": "Light",
+            "icon": "sun",
+            "increase": {
+                "en": "Remove shading obstacles (trees, structures) near the field. Use reflective mulch to boost light.",
+                "tr": "Tarla yakınındaki gölge engellerini (ağaçlar, yapılar) kaldırın. Işığı artırmak için yansıtıcı malç kullanın."
+            },
+            "decrease": {
+                "en": "Use shade nets or inter-cropping with taller plants to reduce light intensity.",
+                "tr": "Işık yoğunluğunu azaltmak için gölge ağları veya daha uzun bitkilerle aralarına ekim yapın."
+            },
+        },
+        "Rh": {
+            "category": "Humidity",
+            "icon": "wind",
+            "increase": {
+                "en": "Mist irrigation or foggers can increase humidity. Windbreaks reduce drying winds.",
+                "tr": "Sis sulaması veya atomizörler nemi artırabilir. Rüzgar kıranlar kurutucu rüzgarları azaltır."
+            },
+            "decrease": {
+                "en": "Improve air circulation with wider plant spacing. Avoid evening irrigation to reduce night humidity.",
+                "tr": "Daha geniş bitki aralığıyla hava sirkülasyonunu iyileştirin. Gece nemini azaltmak için akşam sulamasından kaçının."
+            },
+        },
+        "Nitrogen": {
+            "category": "Fertilizer",
+            "icon": "leaf",
+            "increase": {
+                "en": "Apply nitrogen-rich fertilizers: urea (46% N), ammonium nitrate, or organic compost. Split application in multiple doses.",
+                "tr": "Azot bakımından zengin gübreler uygulayın: üre (%46 N), amonyum nitrat veya organik kompost. Birden fazla dozda bölünmüş uygulama yapın."
+            },
+            "decrease": {
+                "en": "Reduce nitrogen applications. Use legume cover crops to balance and naturally fix excess nitrogen.",
+                "tr": "Azot uygulamalarını azaltın. Fazla azotu dengelemek ve doğal olarak bağlamak için baklagil örtü bitkileri kullanın."
+            },
+        },
+        "Phosphorus": {
+            "category": "Fertilizer",
+            "icon": "leaf",
+            "increase": {
+                "en": "Apply superphosphate or di-ammonium phosphate (DAP). Rock phosphate is a slow-release organic option.",
+                "tr": "Süperfosfat veya di-amonyum fosfat (DAP) uygulayın. Kaya fosfatı yavaş salınımlı organik bir seçenektir."
+            },
+            "decrease": {
+                "en": "Stop phosphorus fertilization temporarily. High-P soils benefit from deep tillage to dilute concentration.",
+                "tr": "Fosfor gübrelemeyi geçici olarak durdurun. Yüksek fosforlu topraklar, konsantrasyonu seyreltmek için derin sürümden yararlanır."
+            },
+        },
+        "Potassium": {
+            "category": "Fertilizer",
+            "icon": "leaf",
+            "increase": {
+                "en": "Apply potassium chloride (muriate of potash) or potassium sulfate. Wood ash is a natural organic source.",
+                "tr": "Potasyum klorür (potash muriatı) veya potasyum sülfat uygulayın. Odun külü doğal organik bir kaynaktır."
+            },
+            "decrease": {
+                "en": "Avoid potassium-containing fertilizers. Leaching with heavy irrigation can help reduce excess K in sandy soils.",
+                "tr": "Potasyum içeren gübrelerden kaçının. Kumlu topraklarda ağır sulamayla yıkama, fazla K'yı azaltmaya yardımcı olabilir."
+            },
+        },
+        "N_Ratio": {
+            "category": "Nutrient Balance",
+            "icon": "scale",
+            "increase": {
+                "en": "Increase nitrogen relative to other nutrients. Prefer high-N compound fertilizers.",
+                "tr": "Diğer besinlere göre azotu artırın. Yüksek azotlu bileşik gübreler tercih edin."
+            },
+            "decrease": {
+                "en": "Reduce nitrogen or increase phosphorus/potassium to rebalance the N:P:K ratio.",
+                "tr": "N:P:K oranını yeniden dengelemek için azotu azaltın veya fosfor/potasyumu artırın."
+            },
+        },
+        "P_Ratio": {
+            "category": "Nutrient Balance",
+            "icon": "scale",
+            "increase": {
+                "en": "Increase phosphorus application or reduce nitrogen to improve the P ratio.",
+                "tr": "P oranını iyileştirmek için fosfor uygulamasını artırın veya azotu azaltın."
+            },
+            "decrease": {
+                "en": "Reduce phosphorus input or increase nitrogen/potassium to rebalance.",
+                "tr": "Yeniden dengelemek için fosfor girdisini azaltın veya azot/potasyumu artırın."
+            },
+        },
+        "K_Ratio": {
+            "category": "Nutrient Balance",
+            "icon": "scale",
+            "increase": {
+                "en": "Apply potassium-rich fertilizers or reduce nitrogen to improve the K ratio.",
+                "tr": "K oranını iyileştirmek için potasyum açısından zengin gübreler uygulayın veya azotu azaltın."
+            },
+            "decrease": {
+                "en": "Reduce potassium input or increase nitrogen/phosphorus to rebalance.",
+                "tr": "Yeniden dengelemek için potasyum girdisini azaltın veya azot/fosfor artırın."
+            },
+        },
+    }
+
+    recommendations = []
+    current = data.current_values or {}
+
+    for feat, cond in data.optimized_conditions.items():
+        advice_map = ADVICE.get(feat)
+        if not advice_map:
+            continue
+
+        # Determine direction: compare current value vs recommended target
+        cur_val = current.get(feat)
+        rec_val = cond.get("recommended") if isinstance(cond, dict) else cond
+
+        direction = None
+        try:
+            cur_f = float(cur_val) if cur_val is not None else None
+            rec_f = float(rec_val) if rec_val is not None else None
+            if cur_f is not None and rec_f is not None:
+                direction = "increase" if rec_f > cur_f else "decrease"
+            elif isinstance(cond, dict) and "mean" in cond:
+                mean_f = float(cond["mean"])
+                if cur_f is not None:
+                    direction = "increase" if mean_f > cur_f else "decrease"
+        except (TypeError, ValueError):
+            pass
+
+        if direction is None:
+            direction = "increase"
+
+        advice_text = advice_map[direction]
+        recommendations.append({
+            "feature":  feat,
+            "category": advice_map["category"],
+            "icon":     advice_map["icon"],
+            "direction": direction,
+            "target":   rec_val,
+            "advice":   advice_text,
+        })
+
+    return {
+        "crop":            data.crop_name,
+        "recommendations": recommendations,
+    }
+
+
 @app.get("/feature-bounds")
 async def feature_bounds():
     """Return allowed input range for every numerical feature.

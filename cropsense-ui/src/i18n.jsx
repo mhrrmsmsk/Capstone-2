@@ -149,6 +149,23 @@ const T = {
     ab_tech_title: 'Technology Stack',
     ab_data_title: 'Dataset',
     ab_data_body:  'Trained on the Soil_Nutrients dataset containing 15,400 labeled samples across 22 crop types with 17 agronomic features per sample.',
+
+    // Recommendations
+    rec_title:      'Actionable Recommendations',
+    rec_sub:        'Practical steps to reach optimum conditions',
+    rec_loading:    'Generating recommendations…',
+    rec_btn:        'Get Recommendations',
+    rec_empty:      'Run a prediction first to get recommendations',
+    rec_increase:   'Increase',
+    rec_decrease:   'Decrease',
+    rec_target:     'Target',
+    rec_cat_climate:  'Climate',
+    rec_cat_irrigation: 'Irrigation',
+    rec_cat_ph:     'Soil pH',
+    rec_cat_light:  'Light',
+    rec_cat_humidity: 'Humidity',
+    rec_cat_fertilizer: 'Fertilizer',
+    rec_cat_balance: 'Nutrient Balance',
   },
 
   tr: {
@@ -299,6 +316,23 @@ const T = {
     ab_tech_title: 'Teknoloji Yığını',
     ab_data_title: 'Veri Seti',
     ab_data_body:  '22 ürün türünde 15.400 etiketli örnek ve örnek başına 17 agronomi özelliği içeren Soil_Nutrients veri seti üzerinde eğitilmiştir.',
+
+    // Recommendations
+    rec_title:      'Uygulanabilir Öneriler',
+    rec_sub:        'Optimum koşullara ulaşmak için pratik adımlar',
+    rec_loading:    'Öneriler oluşturuluyor…',
+    rec_btn:        'Önerileri Getir',
+    rec_empty:      'Öneri almak için önce tahmin çalıştırın',
+    rec_increase:   'Artır',
+    rec_decrease:   'Azalt',
+    rec_target:     'Hedef',
+    rec_cat_climate:  'İklim',
+    rec_cat_irrigation: 'Sulama',
+    rec_cat_ph:     'Toprak pH',
+    rec_cat_light:  'Işık',
+    rec_cat_humidity: 'Nem',
+    rec_cat_fertilizer: 'Gübre',
+    rec_cat_balance: 'Besin Dengesi',
   },
 }
 

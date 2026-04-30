@@ -18,6 +18,7 @@ export const api = {
   stats:             ()       => req('GET',  '/stats'),
   crops:             ()       => req('GET',  '/crops'),
   featureBounds:     ()       => req('GET',  '/feature-bounds'),
+  recommendations:   (data)   => req('POST', '/recommendations', data),
   featureImportance: ()       => req('GET',  '/feature-importance'),
   predict:           (data)   => req('POST', '/predict', data),
   optimize:          (data)   => req('POST', '/optimize-crop', data),
