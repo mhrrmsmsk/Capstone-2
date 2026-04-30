@@ -259,6 +259,16 @@ export default function Dashboard() {
         ))}
       </div>
 
+      {/* ── Made by ── */}
+      <div style={{ textAlign: 'center', padding: '8px 0 4px', borderTop: '1px solid var(--border)' }}>
+        <p style={{ fontSize: '0.72rem', color: 'var(--text3)' }}>
+          Made with <span style={{ color: 'var(--red)' }}>♥</span> by{' '}
+          <span style={{ color: 'var(--accent)', fontWeight: 700 }}>Alp Salcıoğlu</span>
+          {' '}&{' '}
+          <span style={{ color: 'var(--blue)', fontWeight: 700 }}>Muharrem Şimşek</span>
+        </p>
+      </div>
+
     </div>
   )
 }

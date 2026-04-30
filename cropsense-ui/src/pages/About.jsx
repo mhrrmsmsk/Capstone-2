@@ -1,6 +1,6 @@
 import { useLang } from '../i18n.jsx'
 import { Card } from '../components/ui'
-import { Leaf, Brain, Zap, Database, Code2, CheckCircle2 } from 'lucide-react'
+import { Leaf, Brain, Zap, Database, Code2, CheckCircle2, Users } from 'lucide-react'
 
 const MODEL_CARDS = [
   { label: 'CLASSIFIER', value: 'Random Forest', sub: 'Crop prediction',    color: 'var(--accent)',  glow: 'var(--accent-glow)',  border: 'rgba(34,197,94,0.25)'  },
@@ -143,6 +143,32 @@ export default function About() {
             <div key={l} style={{ background:'var(--amber-glow)', border:'1px solid rgba(245,158,11,0.2)', borderRadius:'12px', padding:'14px', textAlign:'center' }}>
               <p style={{ fontSize:'1.4rem', fontWeight:800, color:'var(--amber)', fontFamily:"'Space Grotesk',sans-serif" }}>{v}</p>
               <p style={{ fontSize:'0.7rem', color:'var(--text3)', marginTop:'4px' }}>{l}</p>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      {/* ── Developers ── */}
+      <Card>
+        <div style={{ display:'flex', alignItems:'center', gap:'12px', marginBottom:'18px' }}>
+          <div style={{ width:'36px', height:'36px', borderRadius:'10px', background:'var(--blue-glow)', border:'1px solid rgba(59,130,246,0.25)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <Users size={17} color="var(--blue)" />
+          </div>
+          <h2 style={{ fontSize:'1.05rem', fontWeight:700, color:'var(--text)' }}>Developers</h2>
+        </div>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap:'14px' }}>
+          {[
+            { name: 'Alp Salcıoğlu',    role: 'Full Stack Developer', color: 'var(--accent)',  glow: 'var(--accent-glow)',  border: 'rgba(34,197,94,0.25)'  },
+            { name: 'Muharrem Şimşek',  role: 'Full Stack Developer', color: 'var(--blue)',    glow: 'var(--blue-glow)',    border: 'rgba(59,130,246,0.25)' },
+          ].map(({ name, role, color, glow, border }) => (
+            <div key={name} style={{ background:glow, border:`1px solid ${border}`, borderRadius:'16px', padding:'20px', display:'flex', alignItems:'center', gap:'14px' }}>
+              <div style={{ width:'44px', height:'44px', borderRadius:'50%', background:color, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <span style={{ fontSize:'1.1rem', fontWeight:800, color:'#fff', fontFamily:"'Space Grotesk',sans-serif" }}>{name.charAt(0)}</span>
+              </div>
+              <div>
+                <p style={{ fontWeight:700, fontSize:'0.9rem', color:'var(--text)' }}>{name}</p>
+                <p style={{ fontSize:'0.72rem', color:'var(--text3)', marginTop:'3px' }}>{role}</p>
+              </div>
             </div>
           ))}
         </div>
