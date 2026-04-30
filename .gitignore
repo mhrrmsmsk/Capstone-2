@@ -27,13 +27,7 @@ Thumbs.db
 # Jupyter
 .ipynb_checkpoints/
 
-# Trained model files (large binaries - retrain with run_pipeline.py)
-models/*.pkl
-models/metrics/
-models/plots/
 
-# Logs
-logs/
 
 # Data (optional: uncomment if dataset should not be tracked)
 # data/
