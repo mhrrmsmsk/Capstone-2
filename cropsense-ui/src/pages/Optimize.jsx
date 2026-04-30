@@ -2,13 +2,8 @@ import { useEffect, useState } from 'react'
 import { api } from '../api'
 import { Card, Btn, Input, Select, Spinner, ErrorMsg, SectionTitle } from '../components/ui'
 import { useLang } from '../i18n.jsx'
-import { Sliders, RefreshCw, TrendingUp, TrendingDown, CheckCircle2, Lightbulb, Thermometer, Droplets, Sun, Wind, Leaf, Scale } from 'lucide-react'
-import { FlaskConical as Flask } from 'lucide-react'
-
-const ICON_MAP  = { thermometer: Thermometer, droplets: Droplets, flask: Flask, sun: Sun, wind: Wind, leaf: Leaf, scale: Scale }
-const CAT_KEY   = { Climate: 'rec_cat_climate', Irrigation: 'rec_cat_irrigation', 'Soil pH': 'rec_cat_ph', Light: 'rec_cat_light', Humidity: 'rec_cat_humidity', Fertilizer: 'rec_cat_fertilizer', 'Nutrient Balance': 'rec_cat_balance' }
-const CAT_COLOR = { Climate: 'var(--amber)', Irrigation: 'var(--blue)', 'Soil pH': 'var(--violet)', Light: 'var(--amber)', Humidity: 'var(--blue)', Fertilizer: 'var(--accent)', 'Nutrient Balance': 'var(--violet)' }
-const CAT_GLOW  = { Climate: 'var(--amber-glow)', Irrigation: 'var(--blue-glow)', 'Soil pH': 'var(--violet-glow)', Light: 'var(--amber-glow)', Humidity: 'var(--blue-glow)', Fertilizer: 'var(--accent-glow)', 'Nutrient Balance': 'var(--violet-glow)' }
+import { Sliders, RefreshCw, TrendingUp, TrendingDown, CheckCircle2 } from 'lucide-react'
+import RecommendationPanel from '../components/RecommendationPanel'
 
 const NUM_FEATURES = [
   { key: 'Temperature',     labelEn: 'Temperature (°C)',   placeholder: '20',  step: '0.1'  },
@@ -43,7 +38,7 @@ export default function Optimize() {
   const [recsLoading, setRecsLoading] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError]     = useState('')
-  const { t, tc, tf, tv, lang } = useLang()
+  const { t, tc, tf, tv } = useLang()
 
   useEffect(() => {
     Promise.all([api.crops(), api.featureBounds()]).then(([d, b]) => {
@@ -250,52 +245,7 @@ export default function Optimize() {
                 </div>
               </Card>
               {/* Recommendations */}
-              {recsLoading && (
-                <div style={{ display:'flex', alignItems:'center', gap:'10px', color:'var(--text3)', fontSize:'0.85rem', padding:'12px 0' }}>
-                  <Lightbulb size={16} color="var(--amber)" />
-                  {t('rec_loading')}
-                </div>
-              )}
-              {recs && recs.length > 0 && !recsLoading && (
-                <div style={{ background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'16px', padding:'18px' }}>
-                  <div style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'16px' }}>
-                    <div style={{ width:'32px', height:'32px', borderRadius:'10px', background:'var(--amber-glow)', border:'1px solid rgba(245,158,11,0.3)', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                      <Lightbulb size={15} color="var(--amber)" />
-                    </div>
-                    <div>
-                      <p style={{ fontWeight:700, fontSize:'0.9rem', color:'var(--text)' }}>{t('rec_title')}</p>
-                      <p style={{ fontSize:'0.7rem', color:'var(--text3)' }}>{t('rec_sub')}</p>
-                    </div>
-                  </div>
-                  <div style={{ display:'flex', flexDirection:'column', gap:'10px' }}>
-                    {recs.map((rec, i) => {
-                      const Icon  = ICON_MAP[rec.icon] || Leaf
-                      const color = CAT_COLOR[rec.category] || 'var(--accent)'
-                      const glow  = CAT_GLOW[rec.category]  || 'var(--accent-glow)'
-                      return (
-                        <div key={i} style={{ background:glow, border:`1px solid ${color}33`, borderRadius:'12px', padding:'14px 16px' }}>
-                          <div style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'8px' }}>
-                            <Icon size={14} color={color} />
-                            <span style={{ fontSize:'0.65rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color }}>
-                              {t(CAT_KEY[rec.category] || 'rec_cat_fertilizer')}
-                            </span>
-                            <span style={{ marginLeft:'auto', display:'flex', alignItems:'center', gap:'4px', fontSize:'0.65rem', color:'var(--text3)' }}>
-                              {rec.direction === 'increase'
-                                ? <TrendingUp size={12} color="var(--accent)" />
-                                : <TrendingDown size={12} color="var(--red)" />}
-                              {rec.direction === 'increase' ? t('rec_increase') : t('rec_decrease')}
-                              {rec.target != null && <span style={{ color:'var(--text2)', fontWeight:600 }}>&nbsp;&rarr; {rec.target}</span>}
-                            </span>
-                          </div>
-                          <p style={{ fontSize:'0.8rem', color:'var(--text2)', lineHeight:1.6, margin:0 }}>
-                            {rec.advice?.[lang] || rec.advice?.en}
-                          </p>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              )}
+              <RecommendationPanel recs={recs} loading={recsLoading} cropName={tc(crop)} />
             </>
           )}
         </div>
