@@ -3,41 +3,101 @@ FastAPI endpoints for the crop recommendation system.
 Provides REST API for making predictions and getting recommendations.
 """
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from typing import Dict, List, Optional
-import json
+from typing import Dict, List, Optional, Any
+import pandas as pd
+import numpy as np
+import joblib
 from pathlib import Path
 
-# Note: These imports would work when running the API in the proper environment
-# from .preprocessing import CropDataProcessor
-# from .train import ModelTrainer
-# from .predict import CropPredictor
-# from .recommender import IntelligentRecommender
-# from .logger import get_logger
+from .preprocessing import CropDataProcessor
+from .predict import CropPredictor
+from .recommender import IntelligentRecommender
+from .logger import get_logger
 
-# logger = get_logger("api")
-
-# For development, you can use the following structure:
-# This file demonstrates the API endpoints structure
-# When deployed, uncomment imports and implement the actual endpoints
+logger = get_logger("api")
 
 app = FastAPI(
-    title="Crop Recommendation & Yield Optimization API",
-    description="ML-powered system for crop recommendation and yield prediction",
-    version="1.0.0"
+    title="CropSense API",
+    description="ML-powered crop recommendation and yield optimization",
+    version="2.0.0"
 )
 
-# Global variables to hold models
-predictor = None
-recommender = None
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+# Global model state
+_predictor: Optional[CropPredictor] = None
+_recommender: Optional[IntelligentRecommender] = None
+_df_train: Optional[pd.DataFrame] = None
+_categorical_options: Dict[str, List[str]] = {}
+
+
+def _load_models():
+    global _predictor, _recommender, _df_train, _categorical_options
+    if _predictor is not None:
+        return
+
+    models_path = Path(__file__).parent.parent / "models"
+    data_path = Path(__file__).parent.parent / "data" / "Soil_Nutrients.csv"
+
+    classifier = joblib.load(models_path / "crop_classifier.pkl")
+    regressor = joblib.load(models_path / "yield_regressor.pkl")
+
+    _df_train = pd.read_csv(data_path)
+
+    preprocessor = CropDataProcessor(str(data_path))
+    preprocessor.load_preprocessor(models_path)
+    preprocessor.load_data()
+    preprocessor.handle_missing_values()
+    preprocessor.identify_features()
+
+    X_train, y_crop, y_yield = preprocessor.prepare_features_for_training()
+    X_train_processed = preprocessor.encode_and_scale(X_train, fit=False)
+
+    _recommender = IntelligentRecommender(
+        df_train=_df_train,
+        X_train_processed=X_train_processed,
+        y_crop=y_crop,
+        y_yield=y_yield,
+        feature_columns=preprocessor.feature_columns,
+        numerical_features=preprocessor.numerical_features,
+        categorical_features=preprocessor.categorical_features,
+        preprocessor=preprocessor,
+    )
+
+    _predictor = CropPredictor(
+        classifier,
+        regressor,
+        preprocessor,
+        _recommender,
+        preprocessor.feature_columns,
+        preprocessor.numerical_features,
+        preprocessor.categorical_features,
+    )
+
+    for col in preprocessor.categorical_features:
+        _categorical_options[col] = sorted(_df_train[col].dropna().unique().tolist())
+
+    logger.info("Models loaded successfully")
+
+
+@app.on_event("startup")
+async def startup_event():
+    _load_models()
+
+
+# ─── Pydantic schemas ────────────────────────────────────────────────────────
 
 class PredictionInput(BaseModel):
-    """Input schema for prediction request."""
-    Fertility: Optional[float] = None
-    Photoperiod: Optional[str] = None
     Temperature: Optional[float] = None
     Rainfall: Optional[float] = None
     pH: Optional[float] = None
@@ -47,19 +107,18 @@ class PredictionInput(BaseModel):
     Nitrogen: Optional[float] = None
     Phosphorus: Optional[float] = None
     Potassium: Optional[float] = None
-    Category_pH: Optional[str] = None
-    Soil_Type: Optional[str] = None
-    Season: Optional[str] = None
     N_Ratio: Optional[float] = None
     P_Ratio: Optional[float] = None
     K_Ratio: Optional[float] = None
+    Fertility: Optional[str] = None
+    Photoperiod: Optional[str] = None
+    Category_pH: Optional[str] = None
+    Soil_Type: Optional[str] = None
+    Season: Optional[str] = None
 
 
 class CropOptimizationInput(BaseModel):
-    """Input schema for crop optimization request."""
     crop_name: str
-    Fertility: Optional[float] = None
-    Photoperiod: Optional[str] = None
     Temperature: Optional[float] = None
     Rainfall: Optional[float] = None
     pH: Optional[float] = None
@@ -69,200 +128,162 @@ class CropOptimizationInput(BaseModel):
     Nitrogen: Optional[float] = None
     Phosphorus: Optional[float] = None
     Potassium: Optional[float] = None
-    Category_pH: Optional[str] = None
-    Soil_Type: Optional[str] = None
-    Season: Optional[str] = None
     N_Ratio: Optional[float] = None
     P_Ratio: Optional[float] = None
     K_Ratio: Optional[float] = None
+    Fertility: Optional[str] = None
+    Photoperiod: Optional[str] = None
+    Category_pH: Optional[str] = None
+    Soil_Type: Optional[str] = None
+    Season: Optional[str] = None
 
 
-@app.get("/")
-async def root():
-    """Root endpoint with API information."""
-    return {
-        "message": "Crop Recommendation & Yield Optimization API",
-        "version": "1.0.0",
-        "endpoints": {
-            "POST /predict": "Get crop recommendations and yield prediction",
-            "POST /optimize-crop": "Get optimization for specific crop",
-            "GET /feature-importance": "Get feature importance scores",
-            "GET /health": "Health check"
-        }
-    }
+# ─── Helpers ─────────────────────────────────────────────────────────────────
 
+def _clean(d: dict) -> dict:
+    """Remove None values from dict."""
+    return {k: v for k, v in d.items() if v is not None}
+
+
+def _to_serializable(obj: Any) -> Any:
+    """Recursively convert numpy types to Python native types."""
+    if isinstance(obj, dict):
+        return {k: _to_serializable(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_to_serializable(v) for v in obj]
+    if isinstance(obj, (np.integer,)):
+        return int(obj)
+    if isinstance(obj, (np.floating,)):
+        return float(obj)
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    return obj
+
+
+# ─── Endpoints ────────────────────────────────────────────────────────────────
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint."""
-    return {
-        "status": "healthy",
-        "message": "API is running"
-    }
+    return {"status": "healthy", "models_loaded": _predictor is not None}
+
+
+@app.get("/crops")
+async def get_crops():
+    """Return list of supported crops and categorical option values."""
+    if _df_train is None:
+        raise HTTPException(status_code=503, detail="Models not loaded")
+    crops = sorted(_df_train["Name"].dropna().unique().tolist())
+    return {"crops": crops, "categorical_options": _categorical_options}
 
 
 @app.post("/predict")
 async def predict(input_data: PredictionInput):
-    """
-    Make crop recommendation and yield prediction.
-    
-    Accepts both complete and partial input data.
-    Returns top 3 crop recommendations with probabilities, estimated yield, and optimal conditions.
-    
-    Example:
-    {
-        "Temperature": 21,
-        "pH": 6.2,
-        "Nitrogen": 120,
-        "Soil_Type": "Loam"
-    }
-    """
-    if predictor is None:
-        raise HTTPException(status_code=503, detail="Models not loaded. Please initialize the system.")
-    
+    """Predict crop and yield from partial or complete sensor data."""
+    if _predictor is None:
+        raise HTTPException(status_code=503, detail="Models not loaded")
     try:
-        # Convert input to dictionary, excluding None values
-        input_dict = {k: v for k, v in input_data.dict().items() if v is not None}
-        
+        input_dict = _clean(input_data.dict())
         if not input_dict:
             raise HTTPException(status_code=400, detail="At least one feature must be provided")
-        
-        # Validate input
-        validation = predictor.validate_input(input_dict)
-        
-        # Make prediction
-        result = predictor.predict(input_dict)
-        result['input_validation'] = validation
-        
-        return JSONResponse(content=result)
-    
+        result = _predictor.predict(input_dict)
+        return JSONResponse(content=_to_serializable(result))
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
+        logger.error(f"Prediction error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/optimize-crop")
 async def optimize_crop(input_data: CropOptimizationInput):
-    """
-    Get optimization recommendations for a specific crop.
-    
-    Returns optimal conditions (ranges) for all features based on high-yield samples.
-    
-    Example:
-    {
-        "crop_name": "Strawberry",
-        "Temperature": 20,
-        "pH": 6.5,
-        "Rainfall": 750
-    }
-    """
-    if predictor is None:
-        raise HTTPException(status_code=503, detail="Models not loaded. Please initialize the system.")
-    
+    """Get optimization plan for a specific crop given current conditions."""
+    if _predictor is None:
+        raise HTTPException(status_code=503, detail="Models not loaded")
     try:
         crop_name = input_data.crop_name
-        
-        # Extract features (excluding crop_name)
-        input_dict = {k: v for k, v in input_data.dict().items() 
-                     if v is not None and k != "crop_name"}
-        
+        input_dict = {k: v for k, v in input_data.dict().items()
+                      if v is not None and k != "crop_name"}
         if not input_dict:
             raise HTTPException(status_code=400, detail="At least one feature must be provided")
-        
-        # Make prediction for specific crop
-        result = predictor.predict_for_crop(crop_name, input_dict)
-        
-        return JSONResponse(content=result)
-    
+        result = _predictor.predict_for_crop(crop_name, input_dict)
+        return JSONResponse(content=_to_serializable(result))
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Optimization failed: {str(e)}")
-
-
-@app.get("/feature-importance")
-async def get_feature_importance():
-    """Get feature importance scores from trained models."""
-    if predictor is None:
-        raise HTTPException(status_code=503, detail="Models not loaded. Please initialize the system.")
-    
-    try:
-        importance = predictor.get_feature_importance()
-        
-        return {
-            "feature_importance": importance,
-            "total_features": len(importance)
-        }
-    
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to get feature importance: {str(e)}")
+        logger.error(f"Optimization error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/batch-predict")
 async def batch_predict(inputs: List[PredictionInput]):
-    """
-    Make batch predictions for multiple inputs.
-    
-    Example:
-    [
-        {"Temperature": 20, "pH": 6.5},
-        {"Temperature": 22, "Rainfall": 800},
-        {"Nitrogen": 150, "Phosphorus": 100}
-    ]
-    """
-    if predictor is None:
-        raise HTTPException(status_code=503, detail="Models not loaded. Please initialize the system.")
-    
-    if not inputs:
-        raise HTTPException(status_code=400, detail="At least one input must be provided")
-    
-    if len(inputs) > 100:
-        raise HTTPException(status_code=400, detail="Maximum 100 inputs allowed per request")
-    
-    try:
-        input_dicts = [
-            {k: v for k, v in input_data.dict().items() if v is not None}
-            for input_data in inputs
-        ]
-        
-        results = predictor.batch_predict(input_dicts)
-        
-        return {
-            "total_predictions": len(results),
-            "predictions": results
-        }
-    
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Batch prediction failed: {str(e)}")
-
-
-@app.get("/model-info")
-async def get_model_info():
-    """Get information about loaded models."""
-    if predictor is None:
+    """Batch prediction — accepts up to 500 rows."""
+    if _predictor is None:
         raise HTTPException(status_code=503, detail="Models not loaded")
-    
-    return {
-        "crop_classifier": predictor.crop_classifier is not None,
-        "yield_regressor": predictor.yield_regressor is not None,
-        "feature_count": len(predictor.feature_columns),
-        "numerical_features": len(predictor.numerical_features),
-        "categorical_features": len(predictor.categorical_features),
-        "features": predictor.feature_columns
+    if not inputs:
+        raise HTTPException(status_code=400, detail="At least one input required")
+    if len(inputs) > 500:
+        raise HTTPException(status_code=400, detail="Maximum 500 rows per request")
+    try:
+        results = []
+        for i, row in enumerate(inputs):
+            d = _clean(row.dict())
+            if not d:
+                continue
+            r = _predictor.predict(d)
+            r["row_index"] = i + 1
+            results.append(_to_serializable(r))
+        return {"total": len(results), "predictions": results}
+    except Exception as e:
+        logger.error(f"Batch error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/feature-importance")
+async def feature_importance():
+    """Return feature importance from saved CSVs."""
+    models_path = Path(__file__).parent.parent / "models"
+    result = {}
+    for name, fname in [("crop", "feature_importance_crop.csv"),
+                         ("yield", "feature_importance_yield.csv")]:
+        fp = models_path / fname
+        if fp.exists():
+            df = pd.read_csv(fp)
+            result[name] = df.rename(columns={"feature": "feature", "importance": "importance"}).to_dict(orient="records")
+    if not result:
+        raise HTTPException(status_code=404, detail="Feature importance files not found. Run run_pipeline.py first.")
+    return result
+
+
+@app.get("/stats")
+async def stats():
+    """Return dataset statistics for the dashboard."""
+    if _df_train is None:
+        raise HTTPException(status_code=503, detail="Models not loaded")
+    crops = sorted(_df_train["Name"].dropna().unique().tolist())
+    yield_stats = {
+        "min": float(_df_train["Yield"].min()),
+        "max": float(_df_train["Yield"].max()),
+        "mean": float(_df_train["Yield"].mean()),
     }
-
-
-def initialize_api(predictor_instance, recommender_instance):
-    """
-    Initialize the API with model instances.
-    Call this after loading models in main.py or notebook.
-    
-    Args:
-        predictor_instance: CropPredictor instance
-        recommender_instance: IntelligentRecommender instance
-    """
-    global predictor, recommender
-    predictor = predictor_instance
-    recommender = recommender_instance
+    crop_yield = (
+        _df_train.groupby("Name")["Yield"]
+        .mean()
+        .sort_values(ascending=False)
+        .reset_index()
+        .rename(columns={"Name": "crop", "Yield": "avg_yield"})
+        .to_dict(orient="records")
+    )
+    return {
+        "total_samples": int(len(_df_train)),
+        "total_crops": len(crops),
+        "total_features": 17,
+        "classification_accuracy": 1.0,
+        "yield_r2": 0.9946,
+        "yield_stats": yield_stats,
+        "crop_yield_ranking": _to_serializable(crop_yield),
+    }
 
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run("src.api:app", host="0.0.0.0", port=8000, reload=True)

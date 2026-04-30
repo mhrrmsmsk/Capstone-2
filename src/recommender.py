@@ -194,41 +194,34 @@ class IntelligentRecommender:
         """
         logger.info(f"Recommending crops for input: {list(partial_input_dict.keys())}")
         
-        # Find similar high-yield samples
-        similar_samples = self.find_similar_samples(partial_input_dict, n_neighbors=20, high_yield_only=True)
+        # Build a complete feature vector by filling missing features with
+        # training-data medians/modes (same logic as find_similar_samples)
+        feature_vector = {}
+        for feat in self.feature_columns:
+            if feat in partial_input_dict:
+                feature_vector[feat] = partial_input_dict[feat]
+            else:
+                if feat in self.numerical_features:
+                    feature_vector[feat] = self.df_train[feat].median()
+                else:
+                    modes = self.df_train[feat].mode()
+                    feature_vector[feat] = modes.iloc[0] if len(modes) > 0 else self.df_train[feat].iloc[0]
         
-        if not similar_samples:
-            similar_samples = self.find_similar_samples(partial_input_dict, n_neighbors=10, high_yield_only=False)
+        # Encode and scale the completed feature vector
+        input_df = pd.DataFrame([feature_vector])
+        input_processed = self.preprocessor.encode_and_scale(input_df, fit=False)
         
-        # For each similar sample, get its crop
-        crop_scores = {}
-        for sample in similar_samples:
-            crop = sample['crop']
-            yield_val = sample['yield']
-            
-            if crop not in crop_scores:
-                crop_scores[crop] = []
-            crop_scores[crop].append(yield_val)
+        # Use the actual classifier to get real probabilities
+        crop_probs = crop_classifier.predict_proba(input_processed)[0]
+        crop_names = crop_classifier.classes_
         
-        # Calculate average yield for each crop
+        # Build sorted recommendation list
         crop_recommendations = []
-        for crop, yields in crop_scores.items():
-            avg_yield = np.mean(yields)
+        for name, prob in sorted(zip(crop_names, crop_probs), key=lambda x: x[1], reverse=True)[:n_recommendations]:
             crop_recommendations.append({
-                'name': crop,
-                'probability': min(1.0, avg_yield / 25.0),  # Normalize to 0-1 range
-                'avg_yield': float(avg_yield),
-                'sample_count': len(yields)
+                'name': str(name),
+                'probability': round(float(prob), 4),
             })
-        
-        # Sort by probability and return top N
-        crop_recommendations.sort(key=lambda x: x['probability'], reverse=True)
-        crop_recommendations = crop_recommendations[:n_recommendations]
-        
-        # Normalize probabilities to sum to 1
-        total_prob = sum([c['probability'] for c in crop_recommendations])
-        for crop in crop_recommendations:
-            crop['probability'] = round(crop['probability'] / total_prob, 4)
         
         logger.info(f"Top {n_recommendations} recommendations: {[c['name'] for c in crop_recommendations]}")
         
