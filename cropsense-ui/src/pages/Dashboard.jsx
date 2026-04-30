@@ -12,11 +12,16 @@ function QuickPredict() {
   const [temp, setTemp]       = useState('')
   const [rain, setRain]       = useState('')
   const [ph, setPh]           = useState('')
+  const [bounds, setBounds]   = useState({})
   const [result, setResult]   = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError]     = useState('')
   const navigate = useNavigate()
   const { t, tc } = useLang()
+
+  useEffect(() => {
+    api.featureBounds().then(setBounds).catch(() => {})
+  }, [])
 
   async function run() {
     const body = {}
@@ -24,6 +29,15 @@ function QuickPredict() {
     if (rain !== '') body.Rainfall    = parseFloat(rain)
     if (ph   !== '') body.pH          = parseFloat(ph)
     if (!Object.keys(body).length) { setError(t('db_qp_err')); return }
+    const oob = [
+      { key: 'Temperature', val: temp, label: 'Temperature' },
+      { key: 'Rainfall',    val: rain, label: 'Rainfall'    },
+      { key: 'pH',          val: ph,   label: 'pH'          },
+    ].filter(({ key, val }) => {
+      const v = parseFloat(val); const b = bounds[key]
+      return !isNaN(v) && b && (v < b.min || v > b.max)
+    })
+    if (oob.length) { setError(`Out of range: ${oob.map(f => f.label).join(', ')}`); return }
     setLoading(true); setError('')
     try { setResult(await api.predict(body)) }
     catch(e) { setError(e.message) }
@@ -61,9 +75,12 @@ function QuickPredict() {
 
       {/* Inputs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '14px' }}>
-        <Input label={t('db_qp_temp')} value={temp} onChange={e => setTemp(e.target.value)} placeholder="22" />
-        <Input label={t('db_qp_rain')} value={rain} onChange={e => setRain(e.target.value)} placeholder="750" />
-        <Input label="pH"              value={ph}   onChange={e => setPh(e.target.value)}   placeholder="6.5" step="0.1" />
+        <Input label={t('db_qp_temp')} value={temp} onChange={e => setTemp(e.target.value)} placeholder="22"
+          min={bounds.Temperature?.min} max={bounds.Temperature?.max} />
+        <Input label={t('db_qp_rain')} value={rain} onChange={e => setRain(e.target.value)} placeholder="750"
+          min={bounds.Rainfall?.min}    max={bounds.Rainfall?.max} />
+        <Input label="pH"              value={ph}   onChange={e => setPh(e.target.value)}   placeholder="6.5" step="0.1"
+          min={bounds.pH?.min}          max={bounds.pH?.max} />
       </div>
 
       {error && (

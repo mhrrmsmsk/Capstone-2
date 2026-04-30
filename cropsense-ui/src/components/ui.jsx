@@ -100,11 +100,16 @@ export function Btn({ children, onClick, disabled, variant = 'primary', type = '
   )
 }
 
-export function Input({ label, value, onChange, type = 'number', placeholder, step }) {
+export function Input({ label, value, onChange, type = 'number', placeholder, step, min, max }) {
+  const outOfRange =
+    value !== '' && value !== undefined &&
+    ((min !== undefined && parseFloat(value) < min) ||
+     (max !== undefined && parseFloat(value) > max))
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
       {label && (
-        <label style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text3)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <label style={{ fontSize: '0.7rem', fontWeight: 600, color: outOfRange ? 'var(--red)' : 'var(--text3)', textTransform: 'uppercase', letterSpacing: '0.05em', transition: 'color 0.15s' }}>
           {label}
         </label>
       )}
@@ -114,27 +119,40 @@ export function Input({ label, value, onChange, type = 'number', placeholder, st
         onChange={onChange}
         placeholder={placeholder}
         step={step}
+        min={min}
+        max={max}
+        title={outOfRange ? `Value must be between ${min} and ${max}` : undefined}
         style={{
           background: 'var(--bg2)',
-          border: '1px solid var(--border2)',
+          border: `1px solid ${outOfRange ? 'var(--red)' : 'var(--border2)'}`,
           borderRadius: '10px',
           padding: '9px 12px',
           fontSize: '0.875rem',
-          color: 'var(--text)',
+          color: outOfRange ? 'var(--red)' : 'var(--text)',
           outline: 'none',
           width: '100%',
-          transition: 'border-color 0.2s, box-shadow 0.2s',
+          transition: 'border-color 0.2s, box-shadow 0.2s, color 0.15s',
           fontFamily: 'inherit',
+          boxShadow: outOfRange ? '0 0 0 3px var(--red-glow)' : 'none',
         }}
         onFocus={e => {
-          e.target.style.borderColor = 'var(--accent)'
-          e.target.style.boxShadow = '0 0 0 3px var(--accent-glow)'
+          if (!outOfRange) {
+            e.target.style.borderColor = 'var(--accent)'
+            e.target.style.boxShadow = '0 0 0 3px var(--accent-glow)'
+          }
         }}
         onBlur={e => {
-          e.target.style.borderColor = 'var(--border2)'
-          e.target.style.boxShadow = 'none'
+          if (!outOfRange) {
+            e.target.style.borderColor = 'var(--border2)'
+            e.target.style.boxShadow = 'none'
+          }
         }}
       />
+      {outOfRange && (
+        <span style={{ fontSize: '0.65rem', color: 'var(--red)', lineHeight: 1.3 }}>
+          {min !== undefined && parseFloat(value) < min ? `Min: ${min}` : `Max: ${max}`}
+        </span>
+      )}
     </div>
   )
 }

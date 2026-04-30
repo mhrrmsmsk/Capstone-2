@@ -254,6 +254,53 @@ async def feature_importance():
     return result
 
 
+@app.get("/feature-bounds")
+async def feature_bounds():
+    """Return allowed input range for every numerical feature.
+
+    Strategy: dataset min/max  ±  20% buffer (floored at 0 where negative
+    makes no physical sense), rounded to 2 decimal places.
+    """
+    if _df_train is None:
+        raise HTTPException(status_code=503, detail="Models not loaded")
+
+    NUMERICAL = [
+        "Temperature", "Rainfall", "pH",
+        "Light_Hours", "Light_Intensity", "Rh",
+        "Nitrogen", "Phosphorus", "Potassium",
+        "N_Ratio", "P_Ratio", "K_Ratio",
+    ]
+    # Features that cannot be negative
+    NON_NEGATIVE = {
+        "Rainfall", "Light_Hours", "Light_Intensity", "Rh",
+        "Nitrogen", "Phosphorus", "Potassium",
+        "N_Ratio", "P_Ratio", "K_Ratio",
+    }
+
+    bounds = {}
+    for col in NUMERICAL:
+        if col not in _df_train.columns:
+            continue
+        col_min = float(_df_train[col].min())
+        col_max = float(_df_train[col].max())
+        spread  = col_max - col_min if col_max != col_min else abs(col_max) * 0.2 or 1.0
+
+        lo = col_min - spread * 0.20
+        hi = col_max + spread * 0.20
+
+        if col in NON_NEGATIVE:
+            lo = max(lo, 0.0)
+
+        bounds[col] = {
+            "min":      round(lo, 2),
+            "max":      round(hi, 2),
+            "data_min": round(col_min, 2),
+            "data_max": round(col_max, 2),
+        }
+
+    return bounds
+
+
 @app.get("/stats")
 async def stats():
     """Return dataset statistics for the dashboard."""

@@ -65,6 +65,7 @@ function CollapseCard({ title, children, defaultOpen = false }) {
 
 export default function Predict() {
   const [catOpts, setCatOpts]         = useState({})
+  const [bounds, setBounds]           = useState({})
   const [vals, setVals]               = useState({})
   const [result, setResult]           = useState(null)
   const [loading, setLoading]         = useState(false)
@@ -72,8 +73,9 @@ export default function Predict() {
   const { t, tc, tf, tv } = useLang()
 
   useEffect(() => {
-    api.crops().then(d => {
+    Promise.all([api.crops(), api.featureBounds()]).then(([d, b]) => {
       setCatOpts(d.categorical_options || {})
+      setBounds(b || {})
       const init = {}
       Object.entries(d.categorical_options || {}).forEach(([k, opts]) => { init[k] = opts[0] })
       setVals(v => ({ ...v, ...init }))
@@ -96,6 +98,11 @@ export default function Predict() {
     })
     CAT_FEATURES.forEach(k => { if (vals[k]) body[k] = vals[k] })
     if (!Object.keys(body).length) { setError(t('pr_err_min')); return }
+    const oob = NUM_FEATURES.filter(({ key }) => {
+      const v = parseFloat(vals[key]); const b = bounds[key]
+      return !isNaN(v) && b && (v < b.min || v > b.max)
+    })
+    if (oob.length) { setError(`Out of range: ${oob.map(f => f.labelEn).join(', ')}`); return }
     setLoading(true); setError('')
     try { setResult(await api.predict(body)) }
     catch(e) { setError(e.message) }
@@ -131,7 +138,15 @@ export default function Predict() {
             <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:'10px' }}>
               {NUM_FEATURES.map(({ key, labelEn, placeholder, step }) => (
                 <div key={key} style={{ position:'relative' }}>
-                  <Input label={tf(key,labelEn)} value={vals[key]??''} onChange={e=>set(key,e.target.value)} placeholder={placeholder} step={step} />
+                  <Input
+                    label={tf(key,labelEn)}
+                    value={vals[key]??''}
+                    onChange={e=>set(key,e.target.value)}
+                    placeholder={placeholder}
+                    step={step}
+                    min={bounds[key]?.min}
+                    max={bounds[key]?.max}
+                  />
                   {vals[key]!==undefined && vals[key]!=='' && (
                     <button onClick={()=>clear(key)} style={{ position:'absolute', right:'8px', top:'26px', background:'none', border:'none', color:'var(--text3)', cursor:'pointer', fontSize:'0.75rem', lineHeight:1 }}>✕</button>
                   )}
